@@ -18,7 +18,7 @@ namespace Boba.PasswordManager.FileHandling
 		public static TValue ReadFromFile<TValue>(string filePath)
 		{
 			string jsonString = File.ReadAllText(filePath);
-			return JsonSerializer.Deserialize<TValue>(jsonString); // throws exception atm
+			return JsonSerializer.Deserialize<TValue>(jsonString);
 		}
 	}
 }

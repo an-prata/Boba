@@ -8,13 +8,14 @@ namespace Boba.PasswordManager
 		bool _disposed = false;
 
 		public List<PasswordEntry> PasswordEntries { get; set; }
+		public string Name { get; set; }
 
 		public void NewEntry(string name, string password) => PasswordEntries.Add(new PasswordEntry(name, password));
-
 		public void NewEntry(PasswordEntry passwordEntry) => PasswordEntries.Add(passwordEntry);
 
 		public PasswordLibrary() { }
-
+		public PasswordLibrary(string name) => Name = name;
+		
 		protected virtual void Dispose(bool disposing)
 		{
 			if (_disposed) return;

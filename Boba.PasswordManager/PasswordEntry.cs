@@ -8,9 +8,7 @@ namespace Boba.PasswordManager
         public string Password { get; set; }
 
         public PasswordEntry() { }
-
         public PasswordEntry(string name) => Name = name;
-
         public PasswordEntry(string name, string password)
         {
             Name = name;
