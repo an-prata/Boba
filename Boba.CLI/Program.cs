@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using System.Security.Cryptography;
 using Boba.PasswordManager;
 using Boba.PasswordManager.FileHandling;
@@ -34,7 +35,7 @@ namespace Boba.CLI
 						break;
 
 					case "add":
-						try { encryptedPasswordLibrary.NewEntry(command[1], command[2]); }
+						try { encryptedPasswordLibrary.NewEntry(command[1], Encoding.UTF8.GetBytes(command[2])); }
 						catch (IndexOutOfRangeException) { Console.WriteLine("Usage: add [entry name] [password]"); }
 						break;
 

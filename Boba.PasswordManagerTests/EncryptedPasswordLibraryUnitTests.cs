@@ -19,10 +19,10 @@ namespace Boba.PasswordManagerTests
 			EncryptedPasswordLibrary encryptedPasswordLibrary = new EncryptedPasswordLibrary(cryptoServiceProvider, "library");
 			Assert.IsNotNull(encryptedPasswordLibrary);
 
-			encryptedPasswordLibrary.NewEntry(name, password);
+			encryptedPasswordLibrary.NewEntry(name, Encoding.UTF8.GetBytes(password));
 			encryptedPasswordLibrary.NewEntry("Jake", Encoding.UTF8.GetBytes("JakesVeryStrongPassword"));
 			encryptedPasswordLibrary.NewEntry(new EncryptedPasswordEntry(cryptoServiceProvider, "Panda6179", Encoding.UTF8.GetBytes("LiterallyAJoke")));
-			encryptedPasswordLibrary.NewEntry(new PasswordEntry("Dave", "DavesInsecurePassword"));
+			encryptedPasswordLibrary.NewEntry(new PasswordEntry("Dave", Encoding.UTF8.GetBytes("DavesInsecurePassword")));
 
 			XmlHandler.SaveToFile("publickey.xml", encryptedPasswordLibrary.CryptoServiceProvider.ExportParameters(false));
 			XmlHandler.SaveToFile("privatekey.xml", encryptedPasswordLibrary.CryptoServiceProvider.ExportParameters(true));

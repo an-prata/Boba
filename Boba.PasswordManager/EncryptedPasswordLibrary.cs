@@ -13,26 +13,50 @@ namespace Boba.PasswordManager
 
 		[JsonIgnore(Condition = JsonIgnoreCondition.Always)]
 		public RSACryptoServiceProvider CryptoServiceProvider { get; set; }
-		public int KeySize { get => CryptoServiceProvider.KeySize; }
 		public new List<EncryptedPasswordEntry> PasswordEntries { get; set; }
 
-		public new void NewEntry(string name, string password) => PasswordEntries.Add(new EncryptedPasswordEntry(name, CryptoServiceProvider.Encrypt(Encoding.UTF8.GetBytes(password), UseOAEPPadding)));
-		public new void NewEntry(PasswordEntry passwordEntry) => PasswordEntries.Add(new EncryptedPasswordEntry(CryptoServiceProvider, passwordEntry));
+		/// <summary>
+		/// Adds an EncryptedPasswordEntry object to PasswordEntries.
+		/// </summary>
+		/// <param name="encryptedPasswordEntry"> The EncryptedPasswordEntry to add. </param>
 		public void NewEntry(EncryptedPasswordEntry encryptedPasswordEntry) => PasswordEntries.Add(encryptedPasswordEntry);
-		public void NewEntry(string name, byte[] password) => PasswordEntries.Add(new EncryptedPasswordEntry(CryptoServiceProvider, name, password));
 
-		///<summary>
-		/// For use only with Json serialization and deserialization, do not use
-		/// without setting <c>EncryptedPasswordLibrary.CryptoServiceProvider</c>
-		/// with an <c>RSACryptoServiceProvider</c> object immediately after.
-		///</summary>
+		/// <summary>
+		/// Creates a new EncryptedPasswordEntry object from an existing PasswordEntry object and adds it to PasswordEntries.
+		/// </summary>
+		/// <param name="passwordEntry"> The PasswordEntry to encrypt and add. </param>
+		public new void NewEntry(PasswordEntry passwordEntry) => PasswordEntries.Add(new EncryptedPasswordEntry(CryptoServiceProvider, passwordEntry));
+		
+		/// <summary>
+		/// Creates a new EncryptedPasswordEntry object.
+		/// </summary>
+		/// <param name="name"> Name of the new EncryptedPasswordEntry. </param>
+		/// <param name="password"> Unecrypted byte[] password for the new EncryptedPasswordEntry. </param>
+		public new void NewEntry(string name, byte[] password) => PasswordEntries.Add(new EncryptedPasswordEntry(CryptoServiceProvider, name, password));
+
+		/// <summary>
+		/// Creates a new EncreyptedPaswordLibrary from a List<EncryptedPasswordEntry> object and a name.
+		/// </summary>
+		/// <param name="passwordEntries"> List of EncryptedPasswordEntries. </param>
+		/// <param name="name"> Name for new EncryptedPasswordLibrary. </param>
 		[JsonConstructor]
 		public EncryptedPasswordLibrary(List<EncryptedPasswordEntry> passwordEntries, string name)
 		{
 			Name = name;
 			PasswordEntries = passwordEntries;
 		}
+
+		/// <summary>
+		/// Creates an instance of EncryptedPasswordLibrary with an empty PasswordEntries.
+		/// </summary>
+		/// <param name="name"> Name for new EncryptedPasswordLibrary. </param>
 		public EncryptedPasswordLibrary(string name) => Name = name;
+
+		/// <summary>
+		/// Creates an instance of EncryptedPasswordLibrary.
+		/// </summary>
+		/// <param name="cryptoServiceProvider"> An RSACryptoServiceProvider to encrypt with. </param>
+		/// <param name="name"> Name for the new Encrypted PasswordLibrary. </param>
 		public EncryptedPasswordLibrary(RSACryptoServiceProvider cryptoServiceProvider, string name)
 		{
 			Name = name;
