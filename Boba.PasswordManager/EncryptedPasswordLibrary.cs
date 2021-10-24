@@ -26,13 +26,32 @@ namespace Boba.PasswordManager
 		/// </summary>
 		/// <param name="passwordEntry"> The PasswordEntry to encrypt and add. </param>
 		public new void NewEntry(PasswordEntry passwordEntry) => PasswordEntries.Add(new EncryptedPasswordEntry(CryptoServiceProvider, passwordEntry));
-		
+
 		/// <summary>
 		/// Creates a new EncryptedPasswordEntry object.
 		/// </summary>
-		/// <param name="name"> Name of the new EncryptedPasswordEntry. </param>
 		/// <param name="password"> Unecrypted byte[] password for the new EncryptedPasswordEntry. </param>
-		public new void NewEntry(string name, byte[] password) => PasswordEntries.Add(new EncryptedPasswordEntry(CryptoServiceProvider, name, password));
+		/// <param name="application"> Name of the application the new EncryptedPasswordEntry should apply to. </param>
+		/// <param name="username"> Username for the application. </param>
+		public new void NewEntry(byte[] password, string application = "", string username = "") => PasswordEntries.Add(new EncryptedPasswordEntry(CryptoServiceProvider, password, application, username));
+
+		/// <summary>
+		/// Creates a new EncryptedPasswordLibrary instance with empty properties.
+		/// </summary>
+		public EncryptedPasswordLibrary() { }
+
+		/// <summary>
+		/// Creates an instance of EncryptedPasswordLibrary.
+		/// </summary>
+		/// <param name="cryptoServiceProvider"> An RSACryptoServiceProvider to encrypt with. </param>
+		/// <param name="name"> Name for the new Encrypted PasswordLibrary. </param>
+		/// <param name="passwordEntries"> A list of EncryptedPasswordEntries. </param>
+		public EncryptedPasswordLibrary(RSACryptoServiceProvider cryptoServiceProvider, string name, List<EncryptedPasswordEntry> passwordEntries)
+		{
+			CryptoServiceProvider = cryptoServiceProvider;
+			Name = name;
+			PasswordEntries = passwordEntries;
+		}
 
 		/// <summary>
 		/// Creates a new EncreyptedPaswordLibrary from a List<EncryptedPasswordEntry> object and a name.
@@ -44,24 +63,6 @@ namespace Boba.PasswordManager
 		{
 			Name = name;
 			PasswordEntries = passwordEntries;
-		}
-
-		/// <summary>
-		/// Creates an instance of EncryptedPasswordLibrary with an empty PasswordEntries.
-		/// </summary>
-		/// <param name="name"> Name for new EncryptedPasswordLibrary. </param>
-		public EncryptedPasswordLibrary(string name) => Name = name;
-
-		/// <summary>
-		/// Creates an instance of EncryptedPasswordLibrary.
-		/// </summary>
-		/// <param name="cryptoServiceProvider"> An RSACryptoServiceProvider to encrypt with. </param>
-		/// <param name="name"> Name for the new Encrypted PasswordLibrary. </param>
-		public EncryptedPasswordLibrary(RSACryptoServiceProvider cryptoServiceProvider, string name)
-		{
-			Name = name;
-			CryptoServiceProvider = cryptoServiceProvider;
-			PasswordEntries = new List<EncryptedPasswordEntry>();
 		}
 
 		protected virtual new void Dispose(bool disposing)

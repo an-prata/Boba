@@ -18,7 +18,7 @@ namespace Boba.PasswordManager
 		/// </summary>
 		/// <param name="name"> Name for the new PasswordEntry. </param>
 		/// <param name="password"> Password for the new PasswordEntry.  </param>
-		public void NewEntry(string name, byte[] password) => PasswordEntries.Add(new PasswordEntry(name, password));
+		public void NewEntry(byte[] password, string username = "", string application = "") => PasswordEntries.Add(new PasswordEntry(password, username, application));
 
 		/// <summary>
 		/// Adds a PasswordEntry object to PasswordEntries.
@@ -35,7 +35,11 @@ namespace Boba.PasswordManager
 		/// Creates a new PasswordLibrary without any PasswordEntry objects.
 		/// </summary>
 		/// <param name="name"> Name for the PasswordLibrary. </param>
-		public PasswordLibrary(string name) => Name = name;
+		public PasswordLibrary(string name, List<PasswordEntry> passwordEntries)
+		{
+			Name = name;
+			PasswordEntries = passwordEntries;
+		}
 		
 		protected virtual void Dispose(bool disposing)
 		{
