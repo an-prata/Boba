@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text;
+using System.Collections.Generic;
 using System.Security.Cryptography;
 using Boba.PasswordManager;
 using Boba.PasswordManager.FileHandling;
@@ -12,7 +13,7 @@ namespace Boba.CLI
 
 		static void Main(string[] args)
 		{
-			EncryptedPasswordLibrary encryptedPasswordLibrary = new EncryptedPasswordLibrary(new RSACryptoServiceProvider(), "untitled");
+			EncryptedPasswordLibrary encryptedPasswordLibrary = new EncryptedPasswordLibrary(new RSACryptoServiceProvider(), "untitled", new List<EncryptedPasswordEntry>());
 			Console.WriteLine($"Boba version {Version}");
 
 			while (true)
@@ -35,8 +36,8 @@ namespace Boba.CLI
 						break;
 
 					case "add":
-						try { encryptedPasswordLibrary.NewEntry(command[1], Encoding.UTF8.GetBytes(command[2])); }
-						catch (IndexOutOfRangeException) { Console.WriteLine("Usage: add [entry name] [password]"); }
+						try { encryptedPasswordLibrary.NewEntry(Encoding.UTF8.GetBytes(command[3]), command[1], command[2]); }
+						catch (IndexOutOfRangeException) { Console.WriteLine("Usage: add [application/site] [username] [password]"); }
 						break;
 
 					case "remove":
@@ -55,7 +56,7 @@ namespace Boba.CLI
 						{
 							try 
 							{ 
-								encryptedPasswordLibrary = new EncryptedPasswordLibrary(new RSACryptoServiceProvider(Convert.ToInt32(command[2])), command[1]);
+								encryptedPasswordLibrary = new EncryptedPasswordLibrary(new RSACryptoServiceProvider(Convert.ToInt32(command[2])), command[1], new List<EncryptedPasswordEntry>());
 								Console.WriteLine($"Created and opened new library with key length {Convert.ToString(encryptedPasswordLibrary.CryptoServiceProvider.KeySize)}: {encryptedPasswordLibrary.Name}");
 								break;
 							}
@@ -66,7 +67,7 @@ namespace Boba.CLI
 						}
 						catch (IndexOutOfRangeException) 
 						{
-							try { encryptedPasswordLibrary = new EncryptedPasswordLibrary(new RSACryptoServiceProvider(), command[1]); }
+							try { encryptedPasswordLibrary = new EncryptedPasswordLibrary(new RSACryptoServiceProvider(), command[1], new List<EncryptedPasswordEntry>()); }
 							catch (IndexOutOfRangeException) { Console.WriteLine("Usage: new [key size (2048)] [new library name]"); }
 						}
 						break;
@@ -103,7 +104,7 @@ namespace Boba.CLI
 						Console.WriteLine("---------------------------------------");
 						Console.WriteLine($"\tNum:\tName:");
 						for (int i = 0; i < encryptedPasswordLibrary.PasswordEntries.Count; i++) 
-							Console.WriteLine($"\t{Convert.ToString(i)}\t{encryptedPasswordLibrary.PasswordEntries[i].Name}");
+							Console.WriteLine($"\t{Convert.ToString(i)}\t{encryptedPasswordLibrary.PasswordEntries[i].Application}");
 						break;
 
 					case "exit":
