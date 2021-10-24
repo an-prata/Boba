@@ -1,5 +1,8 @@
-﻿using System;
-using System.Text;
+﻿// Boba Password Manager (https://github.com/an-prata/Boba)
+// Copyright (c) 2021 Evan Overman (https://github.com/an-prata)
+// Licensed under the MIT License.
+
+using System;
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Text.Json.Serialization;

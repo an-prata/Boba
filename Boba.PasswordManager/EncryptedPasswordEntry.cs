@@ -1,4 +1,8 @@
-﻿using System.Security.Cryptography;
+﻿// Boba Password Manager (https://github.com/an-prata/Boba)
+// Copyright (c) 2021 Evan Overman (https://github.com/an-prata)
+// Licensed under the MIT License.
+
+using System.Security.Cryptography;
 using System.Text.Json.Serialization;
 
 namespace Boba.PasswordManager
@@ -33,11 +37,11 @@ namespace Boba.PasswordManager
 		/// <param name="cryptoServiceProvider"> An RSACryptoServiceProvider to encrypt the password with. </param>
 		/// <param name="passwordEntry"> A PasswordEntry instance to get properties from. </param>
 		public EncryptedPasswordEntry(RSACryptoServiceProvider cryptoServiceProvider, PasswordEntry passwordEntry)
-        {
+		{
 			Application = passwordEntry.Application;
 			Username = passwordEntry.Username;
 			_password = cryptoServiceProvider.Encrypt(passwordEntry.Password, UseOAEPPadding);
-        }
+		}
 
 		/// <summary>
 		/// Creates a new EncryptedPasswordEntry instance.

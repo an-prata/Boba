@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Boba.PasswordManager", "Bob
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Boba.CLI", "Boba.CLI\Boba.CLI.csproj", "{C9A0455E-1EC8-48F4-97BF-E972FEC2A213}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Boba.PasswordManagerTests", "Boba.PasswordManagerTests\Boba.PasswordManagerTests.csproj", "{27723D91-C040-4187-906A-3948EB34D899}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Boba.PasswordManagerTests", "Boba.PasswordManagerTests\Boba.PasswordManagerTests.csproj", "{27723D91-C040-4187-906A-3948EB34D899}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
