@@ -2,7 +2,13 @@
 // Copyright (c) 2021 Evan Overman (https://github.com/an-prata)
 // Licensed under the MIT License.
 
+<<<<<<< HEAD
 using System.Text;
+=======
+using System;
+using System.Text;
+using System.Collections.Generic;
+>>>>>>> 05fce4ed41aa37bc98ba0a29292f027d426ed8a7
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Boba.PasswordManager;
 using Boba.PasswordManager.FileHandling;
