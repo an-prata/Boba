@@ -2,7 +2,6 @@
 // Copyright (c) 2021 Evan Overman (https://github.com/an-prata)
 // Licensed under the MIT License.
 
-using System;
 using System.IO;
 using System.Text;
 using System.Text.Json;
