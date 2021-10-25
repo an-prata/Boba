@@ -17,12 +17,12 @@ jobs:
         dotnet-version: 5.0.x
     - name: Restore dependencies
       run: dotnet restore
-      
+
     - name: Build Boba.PasswordManager
       run: dotnet build ${{github.workspace}}/Boba.PasswordManager/Boba.PasswordManager.csproj --no-restore
-      
+
     - name: Build Boba.CLI
       run: dotnet build ${{github.workspace}}/Boba.CLI/Boba.CLI.csproj --no-restore
-      
+
     - name: Run Boba.PasswordManagerTests
       run: dotnet test ${{github.workspace}}/Boba.PasswordManagerTests/Boba.PasswordManagerTests.csproj --verbosity normal
