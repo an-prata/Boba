@@ -11,12 +11,13 @@ namespace Boba.PasswordManager
 {
 	public class EncryptedPasswordLibrary : PasswordLibrary
 	{
-		private const bool UseOAEPPadding = true;
 		bool _disposed = false;
+
+		private List<EncryptedPasswordEntry> _encryptedPasswordEntries;
 
 		[JsonIgnore(Condition = JsonIgnoreCondition.Always)]
 		public RSACryptoServiceProvider CryptoServiceProvider { get; set; }
-		public new List<EncryptedPasswordEntry> PasswordEntries { get; set; }
+		public new List<EncryptedPasswordEntry> PasswordEntries { get => _encryptedPasswordEntries; set => _encryptedPasswordEntries = Sort(value); }
 
 		/// <summary>
 		/// Adds an EncryptedPasswordEntry object to PasswordEntries.
@@ -48,6 +49,12 @@ namespace Boba.PasswordManager
 		{
 			PasswordEntries.Add(new EncryptedPasswordEntry(CryptoServiceProvider, password, application, username));
 			PasswordEntries.Sort(ComparePasswordEntryAlphabeticaly);
+		}
+
+		protected List<EncryptedPasswordEntry> Sort(List<EncryptedPasswordEntry> list)
+		{
+			list.Sort(ComparePasswordEntryAlphabeticaly);
+			return list;
 		}
 
 		/// <summary>

@@ -10,12 +10,13 @@ namespace Boba.PasswordManager
 {
 	public class PasswordLibrary : IDisposable
 	{
-		bool _disposed = false;
+		private bool _disposed = false;
+		private List<PasswordEntry> _passwordEntries;
 
 		/// <summary>
 		/// A List object containing all the entries in the Library.
 		/// </summary>
-		public List<PasswordEntry> PasswordEntries { get; set; }
+		public List<PasswordEntry> PasswordEntries { get => _passwordEntries; set => _passwordEntries = Sort(value); }
 		public string Name { get; set; }
 
 		/// <summary>
@@ -70,6 +71,12 @@ namespace Boba.PasswordManager
                 }
             }
 		}
+
+		protected List<PasswordEntry> Sort(List<PasswordEntry> list)
+        {
+			list.Sort(ComparePasswordEntryAlphabeticaly);
+			return list;
+        }
 
 		/// <summary>
 		/// Creates a new PasswordLibrary instance with empty properties.
