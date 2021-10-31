@@ -1,3 +1,3 @@
 [![Build](https://github.com/an-prata/Boba/actions/workflows/dotnet.yml/badge.svg)](https://github.com/an-prata/Boba/actions/workflows/dotnet.yml) [![CodeFactor](https://www.codefactor.io/repository/github/an-prata/boba/badge/master)](https://www.codefactor.io/repository/github/an-prata/boba/overview/master)
 # Boba
-An open source password manager utilizing the RSA encryption algorithm.
+An open source and cross platform password manager utilizing the RSA encryption algorithm. Boba is built on Eto, a cross platform native GUI framework which can be found here: https://github.com/picoe/Eto. As of now I have no way of testing the app on MacOS as I dont own a Mac, and there will be no support for mobile as of now.
