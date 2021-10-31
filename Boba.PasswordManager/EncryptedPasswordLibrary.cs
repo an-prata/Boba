@@ -70,6 +70,12 @@ namespace Boba.PasswordManager
 			EncryptedPasswordEntriesChanged?.Invoke(this, EventArgs.Empty);
 		}
 
+		protected List<EncryptedPasswordEntry> Sort(List<EncryptedPasswordEntry> list)
+		{
+			list.Sort(ComparePasswordEntryAlphabeticaly);
+			return list;
+		}
+
 		/// <summary>
 		/// Creates a new EncryptedPasswordLibrary instance with empty properties.
 		/// </summary>
