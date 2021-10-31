@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Form
+	xmlns="http://schema.picoe.ca/eto.forms" 
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:local="clr-namespace:Boba.Desktop;assembly=Boba.Desktop"
+	Title="My Eto Form"
+	MinimumSize="680,300"
+	Padding="10"
+	>
+	<TableLayout>
+		
+		<TableRow ScaleHeight="true">
+			<TableCell>
+				<ListBox Width="180" x:Name="passwordEntriesListBox"/>
+			</TableCell>
+			<TableCell>
+				<Label></Label>
+			</TableCell>
+		</TableRow>
+		
+		<TableRow ScaleHeight="False">
+			<TableCell>
+				<StackLayout Orientation="Horizontal" Width="180">
+					<Button Text="+" Click="HandleAddPasswordEntryButton" Width="90"/>
+					<Button Text="-" Click="HandleRemovePasswordEntryButton" Width="90"/>
+				</StackLayout>
+			</TableCell>
+		</TableRow>
+		
+	</TableLayout>
+</Form>
