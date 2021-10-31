@@ -10,34 +10,27 @@ using Eto.Serialization.Xaml;
 
 namespace Boba.Desktop
 {	
-	public class AddPasswordEntryDialog : Dialog
+	public class PasswordDialogBox : Dialog
 	{
 		private Label PasswordsMatchLabel { get; set; }
 		private Button CloseButton { get; set; }
-		private TextBox ApplicationTextBox { get; set; }
-		private TextBox UsernameTextBox { get; set; }
 		private PasswordBox PasswordTextBox { get; set; }
 		private PasswordBox ConfirmPasswordTextBox { get; set; }
+		public byte[] Result { get; private set; }
 
-		public string Application { get; private set; }
-		public string Username { get; private set; }
-		public byte[] Password { get; private set; }
-
-		public AddPasswordEntryDialog()
+		public PasswordDialogBox(string title)
 		{
 			XamlReader.Load(this);
+			Title = title;
 			CloseButton.Click += CloseButton_Clicked;
-			ApplicationTextBox.TextChanged += ApplicationTextBox_TextChanged;
-			UsernameTextBox.TextChanged += UsernameTextBox_TextChanged;
 			PasswordTextBox.TextChanged += PasswordTextBox_TextChanged;
-
 			PasswordTextBox.TextChanged += PasswordTextBoxes_TextChanged;
 			ConfirmPasswordTextBox.TextChanged += PasswordTextBoxes_TextChanged;
 		}
 
 		protected void PasswordTextBoxes_TextChanged(object sender, EventArgs e)
 		{
-			if (PasswordTextBox.Text == ConfirmPasswordTextBox.Text) 
+			if (PasswordTextBox.Text == ConfirmPasswordTextBox.Text)
 			{
 				PasswordsMatchLabel.TextColor = Color.FromArgb(99, 180, 86);
 				PasswordsMatchLabel.Text = "Passwords Match!";
@@ -52,8 +45,6 @@ namespace Boba.Desktop
 		{
 			if (PasswordTextBox.Text == ConfirmPasswordTextBox.Text)
 			{
-				if (ApplicationTextBox.Text == "" || ApplicationTextBox.Text == null) ApplicationTextBox.Text = "No Application";
-				if (UsernameTextBox.Text == "" || UsernameTextBox.Text == null) UsernameTextBox.Text = "No Username";
 				if (PasswordTextBox.Text == "")
 				{
 					MessageBox.Show("Please enter a password.");
@@ -65,10 +56,6 @@ namespace Boba.Desktop
 			else MessageBox.Show("Passwords do not match");
 		}
 
-		protected void ApplicationTextBox_TextChanged(object sender, EventArgs e) => Application = ApplicationTextBox.Text;
-
-		protected void UsernameTextBox_TextChanged(object sender, EventArgs e) => Username = UsernameTextBox.Text;
-
-		protected void PasswordTextBox_TextChanged(object sender, EventArgs e) => Password = Encoding.UTF8.GetBytes(PasswordTextBox.Text);
+		protected void PasswordTextBox_TextChanged(object sender, EventArgs e) => Result = Encoding.UTF8.GetBytes(PasswordTextBox.Text);
 	}
 }

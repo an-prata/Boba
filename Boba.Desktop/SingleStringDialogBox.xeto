@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Dialog
+	xmlns="http://schema.picoe.ca/eto.forms" 
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:local="clr-namespace:Boba.Desktop;assembly=EtoApp.1"
+	Title="Title"
+	MinimumSize="200, 80"
+	Padding="10">
+	<StackLayout Spacing="10">
+		<TextBox Width="180" x:Name="StringTextBox"/>
+		<Button Width="180" x:Name="EnterButton" Click="EnterButton_Clicked">Enter</Button>
+	</StackLayout>
+
+</Dialog>

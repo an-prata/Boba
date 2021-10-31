@@ -7,9 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Boba.PasswordManager", "Bob
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Boba.CLI", "Boba.CLI\Boba.CLI.csproj", "{C9A0455E-1EC8-48F4-97BF-E972FEC2A213}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Boba.PasswordManagerTests", "Boba.PasswordManagerTests\Boba.PasswordManagerTests.csproj", "{27723D91-C040-4187-906A-3948EB34D899}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Boba.Desktop", "Boba.Desktop\Boba.Desktop.csproj", "{D7FC084B-7E76-4A23-9D5B-60B7857E75BD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Boba.Desktop", "Boba.Desktop\Boba.Desktop.csproj", "{D7FC084B-7E76-4A23-9D5B-60B7857E75BD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Boba.PasswordManagerUnitTests", "Boba.PasswordManagerUnitTests\Boba.PasswordManagerUnitTests.csproj", "{E2DE30CE-3DC6-45DA-8888-38D70F7B8750}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,14 +25,14 @@ Global
 		{C9A0455E-1EC8-48F4-97BF-E972FEC2A213}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C9A0455E-1EC8-48F4-97BF-E972FEC2A213}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C9A0455E-1EC8-48F4-97BF-E972FEC2A213}.Release|Any CPU.Build.0 = Release|Any CPU
-		{27723D91-C040-4187-906A-3948EB34D899}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{27723D91-C040-4187-906A-3948EB34D899}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{27723D91-C040-4187-906A-3948EB34D899}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{27723D91-C040-4187-906A-3948EB34D899}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D7FC084B-7E76-4A23-9D5B-60B7857E75BD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D7FC084B-7E76-4A23-9D5B-60B7857E75BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D7FC084B-7E76-4A23-9D5B-60B7857E75BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D7FC084B-7E76-4A23-9D5B-60B7857E75BD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E2DE30CE-3DC6-45DA-8888-38D70F7B8750}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E2DE30CE-3DC6-45DA-8888-38D70F7B8750}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E2DE30CE-3DC6-45DA-8888-38D70F7B8750}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E2DE30CE-3DC6-45DA-8888-38D70F7B8750}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
