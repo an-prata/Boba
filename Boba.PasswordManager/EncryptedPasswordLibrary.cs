@@ -22,13 +22,21 @@ namespace Boba.PasswordManager
 		/// Adds an EncryptedPasswordEntry object to PasswordEntries.
 		/// </summary>
 		/// <param name="encryptedPasswordEntry"> The EncryptedPasswordEntry to add. </param>
-		public void NewEntry(EncryptedPasswordEntry encryptedPasswordEntry) => PasswordEntries.Add(encryptedPasswordEntry);
+		public void NewEntry(EncryptedPasswordEntry encryptedPasswordEntry)
+		{
+			PasswordEntries.Add(encryptedPasswordEntry);
+			PasswordEntries.Sort(ComparePasswordEntryAlphabeticaly);
+		}
 
 		/// <summary>
 		/// Creates a new EncryptedPasswordEntry object from an existing PasswordEntry object and adds it to PasswordEntries.
 		/// </summary>
 		/// <param name="passwordEntry"> The PasswordEntry to encrypt and add. </param>
-		public new void NewEntry(PasswordEntry passwordEntry) => PasswordEntries.Add(new EncryptedPasswordEntry(CryptoServiceProvider, passwordEntry));
+		public new void NewEntry(PasswordEntry passwordEntry)
+		{	
+			PasswordEntries.Add(new EncryptedPasswordEntry(CryptoServiceProvider, passwordEntry));
+			PasswordEntries.Sort(ComparePasswordEntryAlphabeticaly);
+		}
 
 		/// <summary>
 		/// Creates a new EncryptedPasswordEntry object.
@@ -36,7 +44,11 @@ namespace Boba.PasswordManager
 		/// <param name="password"> Unecrypted byte[] password for the new EncryptedPasswordEntry. </param>
 		/// <param name="application"> Name of the application the new EncryptedPasswordEntry should apply to. </param>
 		/// <param name="username"> Username for the application. </param>
-		public new void NewEntry(byte[] password, string application = "", string username = "") => PasswordEntries.Add(new EncryptedPasswordEntry(CryptoServiceProvider, password, application, username));
+		public new void NewEntry(byte[] password, string application = "", string username = "")
+		{
+			PasswordEntries.Add(new EncryptedPasswordEntry(CryptoServiceProvider, password, application, username));
+			PasswordEntries.Sort(ComparePasswordEntryAlphabeticaly);
+		}
 
 		/// <summary>
 		/// Creates a new EncryptedPasswordLibrary instance with empty properties.

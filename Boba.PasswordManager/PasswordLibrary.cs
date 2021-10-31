@@ -3,6 +3,7 @@
 // Licensed under the MIT License.
 
 using System;
+using System.Text;
 using System.Collections.Generic;
 
 namespace Boba.PasswordManager
@@ -22,13 +23,53 @@ namespace Boba.PasswordManager
 		/// </summary>
 		/// <param name="name"> Name for the new PasswordEntry. </param>
 		/// <param name="password"> Password for the new PasswordEntry.  </param>
-		public void NewEntry(byte[] password, string username = "", string application = "") => PasswordEntries.Add(new PasswordEntry(password, username, application));
+		public void NewEntry(byte[] password, string username = "", string application = "")
+		{
+			PasswordEntries.Add(new PasswordEntry(password, username, application));
+			PasswordEntries.Sort(ComparePasswordEntryAlphabeticaly);
+		}
 
 		/// <summary>
 		/// Adds a PasswordEntry object to PasswordEntries.
 		/// </summary>
 		/// <param name="passwordEntry"> The PasswordEntry object to add. </param>
-		public void NewEntry(PasswordEntry passwordEntry) => PasswordEntries.Add(passwordEntry);
+		public void NewEntry(PasswordEntry passwordEntry)
+		{
+			PasswordEntries.Add(passwordEntry);
+			PasswordEntries.Sort(ComparePasswordEntryAlphabeticaly);
+		}
+
+		/// <summary>
+		/// Compares two PasswordEntries for whichever should appear before the other
+		/// in an alphabeticaly ordered list.
+		/// </summary>
+		protected int ComparePasswordEntryAlphabeticaly(PasswordEntry x, PasswordEntry y)
+        {
+			if (x == null)
+			{
+				if (y == null) { return 0; }
+				else { return -1; }
+			}
+			else
+            {
+				if (y == null) { return 1; }
+				else
+                {
+					byte[] bytesX = Encoding.UTF8.GetBytes(x.Application);
+					byte[] bytesY = Encoding.UTF8.GetBytes(y.Application);
+
+					for (int i = 0; i < (x.Application.Length > y.Application.Length ? y.Application.Length : x.Application.Length); i++)
+                    {
+						if (bytesX[i] > bytesY[i]) { return 1; }
+						if (bytesY[i] > bytesX[i]) { return -1; }
+					}
+
+					if (x.Application.Length > y.Application.Length) { return 1; }
+					if (y.Application.Length > x.Application.Length) { return -1; }
+					return 0;
+                }
+            }
+		}
 
 		/// <summary>
 		/// Creates a new PasswordLibrary instance with empty properties.
