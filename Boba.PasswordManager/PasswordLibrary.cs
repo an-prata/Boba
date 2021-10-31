@@ -11,12 +11,23 @@ namespace Boba.PasswordManager
 	public class PasswordLibrary : IDisposable
 	{
 		bool _disposed = false;
+		private List<PasswordEntry> _passwordEntries;
 
 		/// <summary>
 		/// A List object containing all the entries in the Library.
 		/// </summary>
-		public List<PasswordEntry> PasswordEntries { get; set; }
+		public List<PasswordEntry> PasswordEntries 
+		{
+            get { return _passwordEntries; }
+            set
+            {
+				_passwordEntries = value;
+				PasswordEntriesChanged?.Invoke(this, EventArgs.Empty);
+			}
+		}
+
 		public string Name { get; set; }
+		public event EventHandler PasswordEntriesChanged;
 
 		/// <summary>
 		/// Creates and adds a new PasswordEntry object to PasswordEntries.
@@ -27,6 +38,7 @@ namespace Boba.PasswordManager
 		{
 			PasswordEntries.Add(new PasswordEntry(password, username, application));
 			PasswordEntries.Sort(ComparePasswordEntryAlphabeticaly);
+			PasswordEntriesChanged?.Invoke(this, EventArgs.Empty);
 		}
 
 		/// <summary>
@@ -37,6 +49,7 @@ namespace Boba.PasswordManager
 		{
 			PasswordEntries.Add(passwordEntry);
 			PasswordEntries.Sort(ComparePasswordEntryAlphabeticaly);
+			PasswordEntriesChanged?.Invoke(this, EventArgs.Empty);
 		}
 
 		/// <summary>

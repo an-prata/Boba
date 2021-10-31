@@ -1,4 +1,4 @@
-﻿// Boba Password Manager (https://github.com/an-prata/Boba)
+// Boba Password Manager (https://github.com/an-prata/Boba)
 // Copyright (c) 2021 Evan Overman (https://github.com/an-prata)
 // Licensed under the MIT License.
 
@@ -10,9 +10,9 @@ using Boba.PasswordManager;
 
 namespace Boba.PasswordManagerTests
 {
-    [TestClass]
-    class PasswordLibraryUnitTests
-    {
+	[TestClass]
+	public class EncryptedPasswordLibraryUnitTests
+	{
 		//private readonly string[] Applications = { "google.com", "docs.microsoft.com", "github.com", "stackoverflow.com" };
 		//private readonly string[] Usernames = { "jake@gmail.com", "jake", "jakemiester1234", "jakesmith@outlook.com" };
 		//private readonly string[] Passwords = { "jakesSuperStrongPassword", "Password12345", "TheBatmanEmoji", "#sYfg@sh&*gskks%$#17291$sg%" };
@@ -31,22 +31,25 @@ namespace Boba.PasswordManagerTests
 			{ "stackoverflow.com", "jakesmith@outlook.com", "#sYfg@sh&*gskks%$#17291$sg%"}
 		};
 
-		private readonly RSACryptoServiceProvider cryptoServiceProvider = new RSACryptoServiceProvider();
-
 		[TestMethod]
-		public void AlphabetizationTest()
+		public void NewEntryTest()
 		{
-			PasswordLibrary passwordLibrary = new PasswordLibrary("test library", new List<PasswordEntry>());
-			PasswordLibrary preSortedPasswordLibrary = new PasswordLibrary("test library", new List<PasswordEntry>());
+			RSACryptoServiceProvider cryptoServiceProvider = new RSACryptoServiceProvider();
+			EncryptedPasswordLibrary encryptedPasswordLibrary = new EncryptedPasswordLibrary(cryptoServiceProvider, "test library", new List<EncryptedPasswordEntry>());
 
-			for (int i = 0; i < Credentials.GetLength(1); i++) 
-				passwordLibrary.NewEntry(Encoding.UTF8.GetBytes(Credentials[i, 2]), Credentials[i, 1], Credentials[i, 0]);
+			for (int i = 0; i < Credentials.GetLength(1); i++)
+			{
+				PasswordEntry passwordEntry = new PasswordEntry()
+				{
+					Application = SortedCredentials[i, 0],
+					Username = SortedCredentials[i, 1],
+					Password = Encoding.UTF8.GetBytes(Credentials[i, 2])
+				};
 
-			for (int i = 0; i < Credentials.GetLength(1); i++) 
-				preSortedPasswordLibrary.NewEntry(Encoding.UTF8.GetBytes(SortedCredentials[i, 2]), SortedCredentials[i, 1], SortedCredentials[i, 0]);
-
-			for (int i = 0; i < passwordLibrary.PasswordEntries.Count; i++) 
-				Assert.AreEqual(passwordLibrary.PasswordEntries[i].Application, preSortedPasswordLibrary.PasswordEntries[i].Application);
+				encryptedPasswordLibrary.NewEntry(passwordEntry);
+				Assert.AreNotEqual(passwordEntry, encryptedPasswordLibrary.PasswordEntries[i]);
+				Assert.AreEqual(Encoding.UTF8.GetString(passwordEntry.Password), Encoding.UTF8.GetString(cryptoServiceProvider.Decrypt(encryptedPasswordLibrary.PasswordEntries[i].Password, true)));
+			}
 		}
 	}
 }
