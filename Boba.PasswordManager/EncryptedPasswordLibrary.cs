@@ -12,12 +12,28 @@ namespace Boba.PasswordManager
 	public class EncryptedPasswordLibrary : PasswordLibrary
 	{
 		bool _disposed = false;
-
 		private List<EncryptedPasswordEntry> _encryptedPasswordEntries;
 
+		/// <summary>
+		/// The RSACryptoServiceProvider used for encrypting and decrypting passwords.
+		/// </summary>
 		[JsonIgnore(Condition = JsonIgnoreCondition.Always)]
 		public RSACryptoServiceProvider CryptoServiceProvider { get; set; }
-		public new List<EncryptedPasswordEntry> PasswordEntries { get => _encryptedPasswordEntries; set => _encryptedPasswordEntries = Sort(value); }
+
+		/// <summary>
+		/// A List object containing all the entries in the Library.
+		/// </summary>
+		public new List<EncryptedPasswordEntry> PasswordEntries
+		{
+			get { return _encryptedPasswordEntries; }
+			set
+			{
+				_encryptedPasswordEntries = value;
+				EncryptedPasswordEntriesChanged?.Invoke(this, EventArgs.Empty);
+			}
+		}
+
+		public event EventHandler EncryptedPasswordEntriesChanged;
 
 		/// <summary>
 		/// Adds an EncryptedPasswordEntry object to PasswordEntries.
@@ -27,6 +43,7 @@ namespace Boba.PasswordManager
 		{
 			PasswordEntries.Add(encryptedPasswordEntry);
 			PasswordEntries.Sort(ComparePasswordEntryAlphabeticaly);
+			EncryptedPasswordEntriesChanged?.Invoke(this, EventArgs.Empty);
 		}
 
 		/// <summary>
@@ -37,6 +54,7 @@ namespace Boba.PasswordManager
 		{	
 			PasswordEntries.Add(new EncryptedPasswordEntry(CryptoServiceProvider, passwordEntry));
 			PasswordEntries.Sort(ComparePasswordEntryAlphabeticaly);
+			EncryptedPasswordEntriesChanged?.Invoke(this, EventArgs.Empty);
 		}
 
 		/// <summary>
@@ -49,6 +67,7 @@ namespace Boba.PasswordManager
 		{
 			PasswordEntries.Add(new EncryptedPasswordEntry(CryptoServiceProvider, password, application, username));
 			PasswordEntries.Sort(ComparePasswordEntryAlphabeticaly);
+			EncryptedPasswordEntriesChanged?.Invoke(this, EventArgs.Empty);
 		}
 
 		protected List<EncryptedPasswordEntry> Sort(List<EncryptedPasswordEntry> list)

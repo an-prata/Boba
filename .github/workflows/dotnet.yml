@@ -24,5 +24,8 @@ jobs:
     - name: Build Boba.CLI
       run: dotnet build ${{github.workspace}}/Boba.CLI/Boba.CLI.csproj --no-restore
 
+    - name: Build Boba.Desktop
+      run: dotnet build ${{github.workspace}}/Boba.Desktop/Boba.Desktop.csproj --no-restore
+
     - name: Run Boba.PasswordManagerTests
       run: dotnet test ${{github.workspace}}/Boba.PasswordManagerUnitTests/Boba.PasswordManagerUnitTests.csproj --verbosity normal

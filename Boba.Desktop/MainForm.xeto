@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Form
+	xmlns="http://schema.picoe.ca/eto.forms" 
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:local="clr-namespace:Boba.Desktop;assembly=Boba.Desktop"
+	Title="Boba Password Manager"
+	MinimumSize="680,300"
+	Padding="10"
+	>
+	<TableLayout Spacing="10, 10">
+		
+		<TableRow ScaleHeight="true">
+			<TableCell>
+				<ListBox Width="180" x:Name="PasswordEntriesListBox"/>
+			</TableCell>
+			<TableCell>
+				<StackLayout Width="200">
+					<Label x:Name="PasswordEntryApplicationLabel" Height="60"/>
+					<Label x:Name="PasswordEntryUsernameLabel" Height="40"/>
+					<Label x:Name="PasswordEntryPasswordLabel"/>
+				</StackLayout>
+			</TableCell>
+			<TableCell>
+				<StackLayout>
+					<Button Width="160" Click="CopyPasswordEntryApplicationButton_Clicked" Enabled="False" x:Name="CopyPasswordEntryApplicationButton">Copy URL</Button>
+					<Label Height="36"/>
+					<Button Width="160" Click="CopyPasswordEntryUsernameButton_Clicked" Enabled="False" x:Name="CopyPasswordEntryUsernameButton">Copy Username</Button>
+					<Label Height="16"/>
+					<Button Width="160" Click="CopyPasswordEntryPasswordButton_Clicked" Enabled="False" x:Name="CopyPasswordEntryPasswordButton">Copy Password</Button>
+				</StackLayout>
+			</TableCell>
+			<TableCell>
+				<StackLayout>
+					<Button Width="100" Click="ChangePasswordEntryApplicationButton_Clicked" Enabled="False" x:Name="ChangePasswordEntryApplicationButton">Rename</Button>
+					<Label Height="36"/>
+					<Button Width="100" Click="ChangePasswordEntryUsernameButton_Clicked" Enabled="False" x:Name="ChangePasswordEntryUsernameButton">Change</Button>
+					<Label Height="16"/>
+					<Button Width="100" Click="ChangePasswordEntryPasswordButton_Clicked" Enabled="False" x:Name="ChangePasswordEntryPasswordButton">Change </Button>
+				</StackLayout>
+			</TableCell>
+		</TableRow>
+		
+		<TableRow ScaleHeight="False">
+			<TableCell>
+				<StackLayout Orientation="Horizontal" Spacing="19" Width="180">
+					<Button Text="+" Click="AddPasswordEntryButton_Clicked" Width="80"/>
+					<Button Text="-" Click="RemovePasswordEntryButton_Clicked" Width="80"/>
+				</StackLayout>
+			</TableCell>
+		</TableRow>
+		
+	</TableLayout>
+</Form>
