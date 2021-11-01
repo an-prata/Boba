@@ -12,9 +12,11 @@ using Boba.PasswordManager;
 
 namespace Boba.Desktop
 {
-	public class MainForm : Form
+	public partial class MainForm : Form
 	{
 		private const string PasswordPlaceholder = "**********";
+
+		public string FilePath { get; set; }
 		private ListBox PasswordEntriesListBox { get; set; }
 		public EncryptedPasswordLibrary CurrentPasswordLibrary { get; set; } 
 		public SortedSet<string> ListBoxEntries { get => (SortedSet<string>)PasswordEntriesListBox.DataStore; set => PasswordEntriesListBox.DataStore = value; }
@@ -34,10 +36,12 @@ namespace Boba.Desktop
 		public MainForm()
 		{
 			XamlReader.Load(this);
-			CurrentPasswordLibrary = new EncryptedPasswordLibrary(new RSACryptoServiceProvider(), "name", new List<EncryptedPasswordEntry>());
+			CurrentPasswordLibrary = new EncryptedPasswordLibrary(new RSACryptoServiceProvider(), "untitled", new List<EncryptedPasswordEntry>());
 			ListBoxEntries = new SortedSet<string>();
+			Title = CurrentPasswordLibrary.Name;
 
 			PasswordEntriesListBox.SelectedIndexChanged += PasswordEntriesListBox_SelectedIndexChanged;
+			PasswordEntriesListBox.SelectedValueChanged += PasswordEntriesListBox_SelectedIndexChanged;
 		}
 
 		protected void AddPasswordEntryButton_Clicked(object sender, EventArgs e)
@@ -73,6 +77,11 @@ namespace Boba.Desktop
 
 		protected void CopyPasswordEntryPasswordButton_Clicked(object sender, EventArgs e)
 		{
+			if (CurrentPasswordLibrary.CryptoServiceProvider == null)
+            {
+				MessageBox.Show("No keys given, please open keys to decrypt password.");
+				return;
+            }
 			try { Clipboard.Instance.Text = Encoding.UTF8.GetString(
 					CurrentPasswordLibrary.CryptoServiceProvider.Decrypt(CurrentPasswordLibrary.PasswordEntries[PasswordEntriesListBox.SelectedIndex].Password, true)); }
 			catch { return; } // Returns if no value is present or no entry is selected.
