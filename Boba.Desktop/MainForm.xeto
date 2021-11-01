@@ -5,32 +5,57 @@
 	xmlns:local="clr-namespace:Boba.Desktop;assembly=Boba.Desktop"
 	Title="Boba Password Manager"
 	MinimumSize="680,300"
-	Padding="10"
-	>
+	Padding="10">
+	
+	<Form.Menu>
+		<MenuBar>
+			<SubMenuItem Text="&amp;File">
+				<ButtonMenuItem Text="Open" x:Name="OpenButtonMenuItem" Click="OpenButtonMenuItem_Clicked" />
+				<ButtonMenuItem Text="New" x:Name="NewButtonMenuItem" Click="NewButtonMenuItem_Clicked" />
+				<ButtonMenuItem Text="Save" x:Name="SaveButtonMenuItem" Click="SaveButtonMenuItem_Clicked" />
+				<ButtonMenuItem Text="Save As..." x:Name="SaveAsButtonMenuItem" Click="SaveAsButtonMenuItem_Clicked" />
+				<ButtonMenuItem Text="Rename Library..." x:Name="RenameLibraryButtonMenuItem" Click="RenameLibraryButtonMenuItem_Clicked" />
+			</SubMenuItem>
+			<SubMenuItem Text="&amp;Keys">
+				<ButtonMenuItem Text="Open Keys" x:Name="OpenKeysButtonMenuItem" Click="OpenKeysButtonMenuItem_Clicked"/>
+				<ButtonMenuItem Text="Save Keys" x:Name="SaveKeysButtonMenuItem" Click="SaveKeysButtonMenuItem_Clicked"/>
+			</SubMenuItem>
+			<!--<MenuBar.ApplicationItems>
+				<ButtonMenuItem Text="Preferences.." Shortcut="{On Control+O, Mac=Application+Comma}" />
+			</MenuBar.ApplicationItems>
+			<MenuBar.QuitItem>
+				<ButtonMenuItem Text="Quit" Shortcut="CommonModifier+Q" Click="HandleQuit" />
+			</MenuBar.QuitItem>
+			<MenuBar.AboutItem>
+				<ButtonMenuItem Text="About..." Click="HandleAbout" />
+			</MenuBar.AboutItem>-->
+		</MenuBar>
+	</Form.Menu>
+	
 	<TableLayout Spacing="10, 10">
 		
 		<TableRow ScaleHeight="true">
 			<TableCell>
 				<ListBox Width="180" x:Name="PasswordEntriesListBox"/>
 			</TableCell>
-			<TableCell>
-				<StackLayout Width="200">
+			<TableCell ScaleWidth="true">
+				<StackLayout HorizontalContentAlignment="Stretch">
 					<Label x:Name="PasswordEntryApplicationLabel" Height="60"/>
 					<Label x:Name="PasswordEntryUsernameLabel" Height="40"/>
 					<Label x:Name="PasswordEntryPasswordLabel"/>
 				</StackLayout>
 			</TableCell>
 			<TableCell>
-				<StackLayout>
-					<Button Width="160" Click="CopyPasswordEntryApplicationButton_Clicked" Enabled="False" x:Name="CopyPasswordEntryApplicationButton">Copy URL</Button>
+				<StackLayout HorizontalContentAlignment="Right">
+					<Button Width="140" Click="CopyPasswordEntryApplicationButton_Clicked" Enabled="False" x:Name="CopyPasswordEntryApplicationButton">Copy URL</Button>
 					<Label Height="36"/>
-					<Button Width="160" Click="CopyPasswordEntryUsernameButton_Clicked" Enabled="False" x:Name="CopyPasswordEntryUsernameButton">Copy Username</Button>
+					<Button Width="140" Click="CopyPasswordEntryUsernameButton_Clicked" Enabled="False" x:Name="CopyPasswordEntryUsernameButton">Copy Username</Button>
 					<Label Height="16"/>
-					<Button Width="160" Click="CopyPasswordEntryPasswordButton_Clicked" Enabled="False" x:Name="CopyPasswordEntryPasswordButton">Copy Password</Button>
+					<Button Width="140" Click="CopyPasswordEntryPasswordButton_Clicked" Enabled="False" x:Name="CopyPasswordEntryPasswordButton">Copy Password</Button>
 				</StackLayout>
 			</TableCell>
 			<TableCell>
-				<StackLayout>
+				<StackLayout HorizontalContentAlignment="Right">
 					<Button Width="100" Click="ChangePasswordEntryApplicationButton_Clicked" Enabled="False" x:Name="ChangePasswordEntryApplicationButton">Rename</Button>
 					<Label Height="36"/>
 					<Button Width="100" Click="ChangePasswordEntryUsernameButton_Clicked" Enabled="False" x:Name="ChangePasswordEntryUsernameButton">Change</Button>
