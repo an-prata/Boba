@@ -16,7 +16,8 @@ namespace Boba.PasswordManagerTests
 		//private readonly string[] Usernames = { "jake@gmail.com", "jake", "jakemiester1234", "jakesmith@outlook.com"};
 		//private readonly string[] Passwords = { "jakesSuperStrongPassword", "Password12345", "TheBatmanEmoji", "#sYfg@sh&*gskks%$#17291$sg%" };
 
-		private readonly string[,] Credentials = {
+		private readonly string[,] Credentials = 
+		{
 			{ "google.com", "jake@gmail.com", "jakesSuperStrongPassword" },
 			{ "docs.microsoft.com", "jake", "Password12345" },
 			{ "github.com", "jakemiester1234", "TheBatmanEmoji"},

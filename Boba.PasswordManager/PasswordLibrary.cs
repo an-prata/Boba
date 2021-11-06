@@ -22,12 +22,10 @@ namespace Boba.PasswordManager
             set
             {
 				_passwordEntries = value;
-				PasswordEntriesChanged?.Invoke(this, EventArgs.Empty);
 			}
 		}
 
 		public string Name { get; set; }
-		public event EventHandler PasswordEntriesChanged;
 
 		/// <summary>
 		/// Creates and adds a new PasswordEntry object to PasswordEntries.
@@ -37,8 +35,7 @@ namespace Boba.PasswordManager
 		public void NewEntry(byte[] password, string username = "", string application = "")
 		{
 			PasswordEntries.Add(new PasswordEntry(password, username, application));
-			PasswordEntries.Sort(ComparePasswordEntryAlphabeticaly);
-			PasswordEntriesChanged?.Invoke(this, EventArgs.Empty);
+			PasswordEntries.Sort(new PasswordEntryComparer());
 		}
 
 		/// <summary>
@@ -48,40 +45,7 @@ namespace Boba.PasswordManager
 		public void NewEntry(PasswordEntry passwordEntry)
 		{
 			PasswordEntries.Add(passwordEntry);
-			PasswordEntries.Sort(ComparePasswordEntryAlphabeticaly);
-			PasswordEntriesChanged?.Invoke(this, EventArgs.Empty);
-		}
-
-		/// <summary>
-		/// Compares two PasswordEntries for whichever should appear before the other
-		/// in an alphabeticaly ordered list.
-		/// </summary>
-		protected int ComparePasswordEntryAlphabeticaly(PasswordEntry x, PasswordEntry y)
-        {
-			if (x == null)
-			{
-				if (y == null) { return 0; }
-				else { return -1; }
-			}
-			else
-            {
-				if (y == null) { return 1; }
-				else
-                {
-					byte[] bytesX = Encoding.UTF8.GetBytes(x.Application);
-					byte[] bytesY = Encoding.UTF8.GetBytes(y.Application);
-
-					for (int i = 0; i < (x.Application.Length > y.Application.Length ? y.Application.Length : x.Application.Length); i++)
-                    {
-						if (bytesX[i] > bytesY[i]) { return 1; }
-						if (bytesY[i] > bytesX[i]) { return -1; }
-					}
-
-					if (x.Application.Length > y.Application.Length) { return 1; }
-					if (y.Application.Length > x.Application.Length) { return -1; }
-					return 0;
-                }
-            }
+			PasswordEntries.Sort(new PasswordEntryComparer());
 		}
 
 		/// <summary>
@@ -102,7 +66,8 @@ namespace Boba.PasswordManager
 		protected virtual void Dispose(bool disposing)
 		{
 			if (_disposed) return;
-			if (disposing) PasswordEntries.Clear();
+			try { if (disposing) PasswordEntries.Clear(); }
+			catch (NullReferenceException) { }
 			_disposed = true;
 		}
 
