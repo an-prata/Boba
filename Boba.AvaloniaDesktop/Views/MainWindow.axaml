@@ -1,0 +1,59 @@
+<Window xmlns="https://github.com/avaloniaui"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:vm="using:Boba.AvaloniaDesktop.ViewModels"
+		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+		x:Class="Boba.AvaloniaDesktop.Views.MainWindow"
+		Icon="/Assets/avalonia-logo.ico"
+		Title="Boba.AvaloniaDesktop">
+
+	<Design.DataContext>
+		<vm:MainWindowViewModel/>
+	</Design.DataContext>
+
+	<Grid ColumnDefinitions="200, *" RowDefinitions="*, 60" Margin="10">
+
+		<ListBox Items="{Binding PasswordEntriesListBox_Items}" 
+				 SelectedIndex="{Binding PasswordEntriesListBox_SelectedIndex}"
+				 SelectionMode="Single, AlwaysSelected"
+				 HorizontalAlignment="Left"
+				 VerticalAlignment="Stretch"
+				 Width="200"
+				 Grid.Row="0"
+				 Grid.Column="0"/>
+
+		<StackPanel Orientation="Horizontal"
+					Height="60"
+					Spacing="10"
+					VerticalAlignment="Bottom"
+					Grid.Row="1"
+					Grid.Column="0">
+
+			<Button Command="{Binding AddEntryButton_Clicked}" 
+					FontSize="30" 
+					Width="40" 
+					Height="40" 
+					VerticalAlignment="Center" 
+					HorizontalContentAlignment="Center" 
+					VerticalContentAlignment="Center"> + </Button>
+
+			<Button Command="{Binding RemoveEntryButton_Clicked}" 
+					FontSize="30" 
+					Width="40" 
+					Height="40" 
+					VerticalAlignment="Center" 
+					HorizontalContentAlignment="Center" 
+					VerticalContentAlignment="Center"> - </Button>
+					
+		</StackPanel>
+
+		<StackPanel Grid.Row="0" Grid.Column="1" Spacing="20">
+			<TextBlock Text="{Binding ApplicationTextBlock_Text}" FontSize="44" Margin="20, 20, 20, 80"/>
+			<TextBlock Text="{Binding UsernameTextBlock_Text}" Margin="20"/>
+			<TextBlock Text="{Binding PasswordTextBlock_Text}" Margin="20"/>
+		</StackPanel>
+
+	</Grid>
+
+</Window>
