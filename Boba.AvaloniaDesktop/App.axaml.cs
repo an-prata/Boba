@@ -1,8 +1,8 @@
 using Avalonia;
-using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
-using Boba.AvaloniaDesktop.ViewModels;
+using Avalonia.Controls.ApplicationLifetimes;
 using Boba.AvaloniaDesktop.Views;
+using Boba.AvaloniaDesktop.ViewModels;
 
 namespace Boba.AvaloniaDesktop
 {

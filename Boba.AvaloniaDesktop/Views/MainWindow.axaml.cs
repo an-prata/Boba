@@ -1,3 +1,6 @@
+// Boba Password Manager (https://github.com/an-prata/Boba)
+// Copyright (c) 2021 Evan Overman (https://github.com/an-prata)
+// Licensed under the MIT License.
 
 using Avalonia;
 using Avalonia.Controls;
