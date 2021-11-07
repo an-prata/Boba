@@ -6,13 +6,15 @@
 		mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
 		x:Class="Boba.AvaloniaDesktop.Views.MainWindow"
 		Icon="/Assets/avalonia-logo.ico"
-		Title="Boba.AvaloniaDesktop">
+		Title="Boba.AvaloniaDesktop"
+		MinWidth="780"
+		MinHeight="400">
 
 	<Design.DataContext>
 		<vm:MainWindowViewModel/>
 	</Design.DataContext>
 
-	<Grid ColumnDefinitions="200, *" RowDefinitions="*, 60" Margin="10">
+	<Grid ColumnDefinitions="200, *, 240" RowDefinitions="*, 60" Margin="10">
 
 		<ListBox Items="{Binding PasswordEntriesListBox_Items}" 
 				 SelectedIndex="{Binding PasswordEntriesListBox_SelectedIndex}"
@@ -31,7 +33,7 @@
 					Grid.Column="0">
 
 			<Button Command="{Binding AddEntryButton_Clicked}" 
-					FontSize="30" 
+					FontSize="17" 
 					Width="40" 
 					Height="40" 
 					VerticalAlignment="Center" 
@@ -39,7 +41,7 @@
 					VerticalContentAlignment="Center"> + </Button>
 
 			<Button Command="{Binding RemoveEntryButton_Clicked}" 
-					FontSize="30" 
+					FontSize="17" 
 					Width="40" 
 					Height="40" 
 					VerticalAlignment="Center" 
@@ -48,11 +50,37 @@
 					
 		</StackPanel>
 
-		<StackPanel Grid.Row="0" Grid.Column="1" Spacing="20">
+		<StackPanel Grid.Row="0" Grid.Column="1" Spacing="20" MinWidth="300">
 			<TextBlock Text="{Binding ApplicationTextBlock_Text}" FontSize="44" Margin="20, 20, 20, 80"/>
 			<TextBlock Text="{Binding UsernameTextBlock_Text}" Margin="20"/>
 			<TextBlock Text="{Binding PasswordTextBlock_Text}" Margin="20"/>
 		</StackPanel>
+
+		<StackPanel HorizontalAlignment="Right" Grid.Row="0" Grid.Column="2" Spacing="20">
+			<Button Command="{Binding CopyApplicationButton_Clicked}" 
+					HorizontalAlignment="Stretch" 
+					HorizontalContentAlignment="Center" 
+					Margin="0, 0, 0, 90"
+					Width="240"
+					IsEnabled="{Binding CopyApplicationButton_IsEnabled}"> Copy Application/Site </Button>
+			<Button Command="{Binding CopyUsernameButton_Clicked}" 
+					HorizontalAlignment="Stretch" 
+					HorizontalContentAlignment="Center" 
+					Width="240"
+					IsEnabled="{Binding CopyUsernameButton_IsEnabled}"> Copy Username/Email </Button>
+			<Button Command="{Binding CopyPasswordButton_Clicked}" 
+					HorizontalAlignment="Stretch" 
+					HorizontalContentAlignment="Center" 
+					Width="240"
+					IsEnabled="{Binding CopyPasswordButton_IsEnabled}"> Copy Password </Button>
+		</StackPanel>
+
+		<Button Command="{Binding EditEntryButton_Clicked}" 
+				Grid.Column="2" 
+				Grid.Row="1" 
+				HorizontalAlignment="Stretch" 
+				HorizontalContentAlignment="Center"
+				IsEnabled="{Binding EditEntryButton_IsEnabled}"> Edit Entry </Button>
 
 	</Grid>
 

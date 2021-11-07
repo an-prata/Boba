@@ -10,46 +10,199 @@ using ReactiveUI;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Selection;
+using Boba.PasswordManager;
+using Boba.AvaloniaDesktop.Views;
+using Boba.AvaloniaDesktop.Models;
+using Boba.AvaloniaDesktop.ViewModels;
 
 namespace Boba.AvaloniaDesktop.ViewModels
 {
 	public class MainWindowViewModel : ViewModelBase
 	{
+		private const string PasswordPlaceholder = "••••••••••••";
+
 		private string _applicationTextBlock_Text;
 		private string _usernameTextBlock_Text;
 		private string _passwordTextBlock_Text;
+		private bool _editEntryButton_IsEnabled;
+		private bool _copyApplicationButton_IsEnabled;
+		private bool _copyUsernameButton_IsEnabled;
+		private bool _copyPasswordButton_IsEnabled;
 		private int _passwordEntriesListBox_SelectedIndex;
 		private ObservableCollection<string> _passwordEntriesListBox_Items;
+		private readonly EncryptedPasswordLibraryModel model;
+		private NewEntryDialogViewModel? newEntryDialogViewModel;
+		private NewEntryDialog? newEntryDialog;
 
-		public string ApplicationTextBlock_Text { get => _applicationTextBlock_Text; set => this.RaiseAndSetIfChanged(ref _applicationTextBlock_Text, value); }
-		public string UsernameTextBlock_Text { get => _usernameTextBlock_Text; set => this.RaiseAndSetIfChanged(ref _applicationTextBlock_Text, value); }
-		public string PasswordTextBlock_Text { get => _passwordTextBlock_Text; set => this.RaiseAndSetIfChanged(ref _passwordTextBlock_Text, value); }
-		public int PasswordEntriesListBox_SelectedIndex { get => _passwordEntriesListBox_SelectedIndex; set => this.RaiseAndSetIfChanged(ref _passwordEntriesListBox_SelectedIndex, value); }
-		public ObservableCollection<string> PasswordEntriesListBox_Items { get => _passwordEntriesListBox_Items; set => this.RaiseAndSetIfChanged(ref _passwordEntriesListBox_Items, value); }
+		public string ApplicationTextBlock_Text 
+		{ 
+			get => _applicationTextBlock_Text; 
+			set => this.RaiseAndSetIfChanged(ref _applicationTextBlock_Text, value); 
+		}
+
+		public string UsernameTextBlock_Text 
+		{ 
+			get => _usernameTextBlock_Text; 
+			set => this.RaiseAndSetIfChanged(ref _usernameTextBlock_Text, value); 
+		}
+
+		public string PasswordTextBlock_Text 
+		{ 
+			get => _passwordTextBlock_Text; 
+			set => this.RaiseAndSetIfChanged(ref _passwordTextBlock_Text, value);
+		}
+
+		public bool EditEntryButton_IsEnabled
+		{
+			get => _editEntryButton_IsEnabled;
+			set => this.RaiseAndSetIfChanged(ref _editEntryButton_IsEnabled, value);
+		}
+
+		public bool CopyApplicationButton_IsEnabled
+		{
+			get => _editEntryButton_IsEnabled;
+			set => this.RaiseAndSetIfChanged(ref _copyApplicationButton_IsEnabled, value);
+		}
+
+		public bool CopyUsernameButton_IsEnabled
+		{
+			get => _editEntryButton_IsEnabled;
+			set => this.RaiseAndSetIfChanged(ref _copyUsernameButton_IsEnabled, value);
+		}
+
+		public bool CopyPasswordButton_IsEnabled
+		{
+			get => _editEntryButton_IsEnabled;
+			set => this.RaiseAndSetIfChanged(ref _copyPasswordButton_IsEnabled, value);
+		}
+
+		public int PasswordEntriesListBox_SelectedIndex 
+		{ 
+			get => _passwordEntriesListBox_SelectedIndex; 
+			set 
+			{
+				this.RaiseAndSetIfChanged(ref _passwordEntriesListBox_SelectedIndex, value);
+				EventHandler eventHandler = SelectedEntryChanged;
+				eventHandler.Invoke(this, new EventArgs());
+			} 
+		}
+
+		public ObservableCollection<string> PasswordEntriesListBox_Items 
+		{ 
+			get => _passwordEntriesListBox_Items; 
+			set => this.RaiseAndSetIfChanged(ref _passwordEntriesListBox_Items, value); 
+		}
+
+		private event EventHandler SelectedEntryChanged;
 
 		public void AddEntryButton_Clicked()
 		{
-			PasswordEntriesListBox_Items.Add("new entry");
+			newEntryDialogViewModel = new NewEntryDialogViewModel();
+			newEntryDialog = new NewEntryDialog { DataContext = newEntryDialogViewModel };
+			newEntryDialogViewModel.OnRequestClose += NewEntryDialog_OnRequestClose;
+			newEntryDialog.Show();
 		}
 
 		public void RemoveEntryButton_Clicked()
 		{
-			try { PasswordEntriesListBox_Items.RemoveAt(PasswordEntriesListBox_SelectedIndex); }
+			try { _passwordEntriesListBox_Items.RemoveAt(PasswordEntriesListBox_SelectedIndex); }
 			catch (ArgumentOutOfRangeException) { return; }
+		}
+
+		public void CopyApplicationButton_Clicked() => Application.Current.Clipboard.SetTextAsync(_applicationTextBlock_Text);
+
+		public void CopyUsernameButton_Clicked() => Application.Current.Clipboard.SetTextAsync(_usernameTextBlock_Text);
+
+		public void CopyPasswordButton_Clicked()
+		{
+			byte[] unencryptedPassword = model.EncryptedPasswordLibraries[0].GetPassword(PasswordEntriesListBox_SelectedIndex);
+			Application.Current.Clipboard.SetTextAsync(Encoding.UTF8.GetString(unencryptedPassword));
+		} 
+
+		public void EditEntryButton_Clicked()
+		{
+			string? unencryptedPassword = Encoding.UTF8.GetString(model.EncryptedPasswordLibraries[0].GetPassword(PasswordEntriesListBox_SelectedIndex));;
+			
+			newEntryDialogViewModel = new NewEntryDialogViewModel()
+			{
+				ApplicationTextBox_Text = _applicationTextBlock_Text,
+				UsernameTextBox_Text = _usernameTextBlock_Text,
+				PasswordTextBox_Text = unencryptedPassword,
+				ConfirmPasswordTextBox_Text = unencryptedPassword
+			};
+
+			unencryptedPassword = null;
+			newEntryDialog = new NewEntryDialog { DataContext = newEntryDialogViewModel };
+			newEntryDialogViewModel.OnRequestClose += EditEntryDialog_OnRequestClose;
+			newEntryDialog.Show();
+		}
+
+		protected void NewEntryDialog_OnRequestClose(object? sender, EventArgs e)
+		{
+			if (newEntryDialogViewModel == null || newEntryDialog == null) throw new NullReferenceException();
+
+			newEntryDialog.Close();
+
+			if (newEntryDialogViewModel.Canceled) return;
+			
+			model.EncryptedPasswordLibraries[0].NewEntry(newEntryDialogViewModel.PasswordResult, newEntryDialogViewModel.ApplicationResult, newEntryDialogViewModel.UsernameResult);
+			PasswordEntriesListBox_Items.Clear();
+
+			model.EncryptedPasswordLibraries[0].PasswordEntries.ForEach(delegate(EncryptedPasswordEntry encryptedPasswordEntry)
+			{
+				PasswordEntriesListBox_Items.Add(encryptedPasswordEntry.Application);
+			});
+		}
+
+		protected void EditEntryDialog_OnRequestClose(object? sender, EventArgs e)
+		{
+			if (newEntryDialogViewModel == null || newEntryDialog == null) throw new NullReferenceException();
+
+			newEntryDialog.Close();
+
+			if (newEntryDialogViewModel.Canceled) return;
+
+			model.EncryptedPasswordLibraries[0].PasswordEntries[_passwordEntriesListBox_SelectedIndex].Application = newEntryDialogViewModel.ApplicationResult;
+			model.EncryptedPasswordLibraries[0].PasswordEntries[_passwordEntriesListBox_SelectedIndex].Username = newEntryDialogViewModel.UsernameResult;
+			model.EncryptedPasswordLibraries[0].PasswordEntries[_passwordEntriesListBox_SelectedIndex].SetPassword(model.EncryptedPasswordLibraries[0].CryptoServiceProvider, newEntryDialogViewModel.PasswordResult);
+			PasswordEntriesListBox_Items[_passwordEntriesListBox_SelectedIndex] = newEntryDialogViewModel.ApplicationResult;
+			EventHandler eventHandler = SelectedEntryChanged;
+			eventHandler.Invoke(this, new EventArgs());
+		}
+
+		protected void OnSelectedEntryChanged(object? sender, EventArgs e)
+		{
+			if (PasswordEntriesListBox_SelectedIndex == -1)
+			{
+				ApplicationTextBlock_Text = Convert.ToString(PasswordEntriesListBox_SelectedIndex);
+				UsernameTextBlock_Text = "";
+				PasswordTextBlock_Text = "";
+				EditEntryButton_IsEnabled = false;
+				CopyApplicationButton_IsEnabled = false;
+				CopyUsernameButton_IsEnabled = false;
+				CopyPasswordButton_IsEnabled = false;
+				return;
+			}
+
+			ApplicationTextBlock_Text = model.EncryptedPasswordLibraries[0].PasswordEntries[PasswordEntriesListBox_SelectedIndex].Application;
+			UsernameTextBlock_Text = model.EncryptedPasswordLibraries[0].PasswordEntries[PasswordEntriesListBox_SelectedIndex].Username;
+			PasswordTextBlock_Text = PasswordPlaceholder;
+			EditEntryButton_IsEnabled = true;
+			CopyApplicationButton_IsEnabled = true;
+			CopyUsernameButton_IsEnabled = true;
+			CopyPasswordButton_IsEnabled = true;
 		}
 
 		public MainWindowViewModel()
 		{
-			_passwordEntriesListBox_Items = new ObservableCollection<string> 
-			{
-				"yeet",
-				"yeet",
-				"yayeet"
-			};
+			_passwordEntriesListBox_Items = new ObservableCollection<string>();
+			SelectedEntryChanged += OnSelectedEntryChanged;
+			model = new EncryptedPasswordLibraryModel(2048, "name");
 
-			_applicationTextBlock_Text = "Google.com";
-			_usernameTextBlock_Text = "evanrileyoverman@gmail.com";
-			_passwordTextBlock_Text = "**********";
+			_applicationTextBlock_Text = "";
+			_usernameTextBlock_Text = "";
+			_passwordTextBlock_Text = "";
+			_editEntryButton_IsEnabled = false;
 		}
 	}
 }

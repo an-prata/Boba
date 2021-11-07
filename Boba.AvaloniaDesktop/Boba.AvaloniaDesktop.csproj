@@ -16,4 +16,7 @@
     <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="0.10.10" />
     <PackageReference Include="ReactiveUI" Version="16.3.10" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Boba.PasswordManager\Boba.PasswordManager.csproj" />
+  </ItemGroup>
 </Project>
