@@ -25,6 +25,11 @@ namespace Boba.PasswordManager
 		/// </summary>
 		public new List<EncryptedPasswordEntry> PasswordEntries { get => _encryptedPasswordEntries; set => _encryptedPasswordEntries = value; }
 
+		/// <summary>
+		/// Gets a decrypted byte[] of the given EncryptedPasswordEntry by index.
+		/// </summary>
+		/// <param name="entryIndex">Index of the EncryptedPasswordEntry</param>
+		public byte[] GetPassword(int entryIndex) => CryptoServiceProvider.Decrypt(_encryptedPasswordEntries[entryIndex].Password, true);
 
 		/// <summary>
 		/// Adds an EncryptedPasswordEntry object to PasswordEntries.
@@ -58,7 +63,11 @@ namespace Boba.PasswordManager
 			PasswordEntries.Sort(new PasswordEntryComparer());
 		}
 
-		protected List<EncryptedPasswordEntry> Sort(List<EncryptedPasswordEntry> list)
+		/// <summary>
+		/// Sorts the given list of EncryptedPasswordEntries.
+		/// </summary>
+		/// <param name="list">The list to be sorted.</param>
+		protected static List<EncryptedPasswordEntry> Sort(List<EncryptedPasswordEntry> list)
 		{
 			list.Sort(new PasswordEntryComparer());
 			return list;
