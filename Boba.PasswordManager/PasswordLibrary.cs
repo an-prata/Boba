@@ -3,12 +3,11 @@
 // Licensed under the MIT License.
 
 using System;
-using System.Text;
 using System.Collections.Generic;
 
 namespace Boba.PasswordManager
 {
-	public class PasswordLibrary : IDisposable
+    public class PasswordLibrary : IDisposable
 	{
 		bool _disposed = false;
 		private List<PasswordEntry> _passwordEntries;

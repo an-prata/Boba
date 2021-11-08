@@ -1,7 +1,5 @@
 ﻿using System;
-using ReactiveUI;
 using Avalonia;
-using Avalonia.Controls.ApplicationLifetimes;
 
 namespace Boba.AvaloniaDesktop
 {

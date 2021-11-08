@@ -4,22 +4,14 @@
 
 using System;
 using System.Text;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using ReactiveUI;
-using Avalonia;
 using Avalonia.Media;
-using Avalonia.Interactivity;
-using Avalonia.Controls;
-using Avalonia.Controls.Selection;
-using Boba.PasswordManager;
 using Boba.AvaloniaDesktop.Views;
-using Boba.AvaloniaDesktop.Models;
 
 
 namespace Boba.AvaloniaDesktop.ViewModels
 {
-	public class NewEntryDialogViewModel : ViewModelBase
+    public class NewEntryDialogViewModel : ViewModelBase
 	{
 		const string PasswordsDontMatch = "Passwords Dont Match! >:(";
 
