@@ -1,5 +1,4 @@
-﻿
-Microsoft Visual Studio Solution File, Format Version 12.00
+﻿Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31424.327
 MinimumVisualStudioVersion = 10.0.40219.1
@@ -10,6 +9,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Boba.Desktop", "Boba.Desktop\Boba.Desktop.csproj", "{D7FC084B-7E76-4A23-9D5B-60B7857E75BD}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Boba.PasswordManagerUnitTests", "Boba.PasswordManagerUnitTests\Boba.PasswordManagerUnitTests.csproj", "{E2DE30CE-3DC6-45DA-8888-38D70F7B8750}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Boba.AvaloniaDesktop", "Boba.AvaloniaDesktop\Boba.AvaloniaDesktop.csproj", "{AB1EE9E9-5F64-4111-B123-A9C3F47467F4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +34,10 @@ Global
 		{E2DE30CE-3DC6-45DA-8888-38D70F7B8750}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E2DE30CE-3DC6-45DA-8888-38D70F7B8750}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E2DE30CE-3DC6-45DA-8888-38D70F7B8750}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AB1EE9E9-5F64-4111-B123-A9C3F47467F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AB1EE9E9-5F64-4111-B123-A9C3F47467F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AB1EE9E9-5F64-4111-B123-A9C3F47467F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AB1EE9E9-5F64-4111-B123-A9C3F47467F4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -23,17 +23,13 @@ namespace Boba.PasswordManager
 		/// <summary>
 		/// A List object containing all the entries in the Library.
 		/// </summary>
-		public new List<EncryptedPasswordEntry> PasswordEntries
-		{
-			get { return _encryptedPasswordEntries; }
-			set
-			{
-				_encryptedPasswordEntries = value;
-				EncryptedPasswordEntriesChanged?.Invoke(this, EventArgs.Empty);
-			}
-		}
+		public new List<EncryptedPasswordEntry> PasswordEntries { get => _encryptedPasswordEntries; set => _encryptedPasswordEntries = value; }
 
-		public event EventHandler EncryptedPasswordEntriesChanged;
+		/// <summary>
+		/// Gets a decrypted byte[] of the given EncryptedPasswordEntry by index.
+		/// </summary>
+		/// <param name="entryIndex">Index of the EncryptedPasswordEntry</param>
+		public byte[] GetPassword(int entryIndex) => CryptoServiceProvider.Decrypt(_encryptedPasswordEntries[entryIndex].Password, true);
 
 		/// <summary>
 		/// Adds an EncryptedPasswordEntry object to PasswordEntries.
@@ -42,8 +38,7 @@ namespace Boba.PasswordManager
 		public void NewEntry(EncryptedPasswordEntry encryptedPasswordEntry)
 		{
 			PasswordEntries.Add(encryptedPasswordEntry);
-			PasswordEntries.Sort(ComparePasswordEntryAlphabeticaly);
-			EncryptedPasswordEntriesChanged?.Invoke(this, EventArgs.Empty);
+			PasswordEntries.Sort(new PasswordEntryComparer());
 		}
 
 		/// <summary>
@@ -53,8 +48,7 @@ namespace Boba.PasswordManager
 		public new void NewEntry(PasswordEntry passwordEntry)
 		{	
 			PasswordEntries.Add(new EncryptedPasswordEntry(CryptoServiceProvider, passwordEntry));
-			PasswordEntries.Sort(ComparePasswordEntryAlphabeticaly);
-			EncryptedPasswordEntriesChanged?.Invoke(this, EventArgs.Empty);
+			PasswordEntries.Sort(new PasswordEntryComparer());
 		}
 
 		/// <summary>
@@ -66,13 +60,16 @@ namespace Boba.PasswordManager
 		public new void NewEntry(byte[] password, string application = "", string username = "")
 		{
 			PasswordEntries.Add(new EncryptedPasswordEntry(CryptoServiceProvider, password, application, username));
-			PasswordEntries.Sort(ComparePasswordEntryAlphabeticaly);
-			EncryptedPasswordEntriesChanged?.Invoke(this, EventArgs.Empty);
+			PasswordEntries.Sort(new PasswordEntryComparer());
 		}
 
-		protected List<EncryptedPasswordEntry> Sort(List<EncryptedPasswordEntry> list)
+		/// <summary>
+		/// Sorts the given list of EncryptedPasswordEntries.
+		/// </summary>
+		/// <param name="list">The list to be sorted.</param>
+		protected static List<EncryptedPasswordEntry> Sort(List<EncryptedPasswordEntry> list)
 		{
-			list.Sort(ComparePasswordEntryAlphabeticaly);
+			list.Sort(new PasswordEntryComparer());
 			return list;
 		}
 
@@ -109,7 +106,8 @@ namespace Boba.PasswordManager
 		protected virtual new void Dispose(bool disposing)
 		{
 			if (_disposed) return;
-			if (disposing) PasswordEntries.Clear();
+			try { if (disposing) PasswordEntries.Clear(); }
+			catch (NullReferenceException) { }
 			_disposed = true;
 		}
 
