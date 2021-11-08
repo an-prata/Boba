@@ -8,16 +8,13 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using ReactiveUI;
 using Avalonia;
-using Avalonia.Controls;
-using Avalonia.Controls.Selection;
 using Boba.PasswordManager;
 using Boba.AvaloniaDesktop.Views;
 using Boba.AvaloniaDesktop.Models;
-using Boba.AvaloniaDesktop.ViewModels;
 
 namespace Boba.AvaloniaDesktop.ViewModels
 {
-	public class MainWindowViewModel : ViewModelBase
+    public partial class MainWindowViewModel : ViewModelBase
 	{
 		private const string PasswordPlaceholder = "••••••••••••";
 
@@ -115,6 +112,15 @@ namespace Boba.AvaloniaDesktop.ViewModels
 
 		public void CopyPasswordButton_Clicked()
 		{
+			if (model.EncryptedPasswordLibraries[0].CryptoServiceProvider == null) 
+			{
+				var viewModel = new MessageBoxViewModel("No keys to decrypt password, please provide a private key.");
+				var messageBox = new MessageBox() { DataContext = viewModel, Width = 340 };
+				viewModel.OnRequestClose += (sender, e) => messageBox.Close();
+				messageBox.Show();
+				return;
+			}
+
 			byte[] unencryptedPassword = model.EncryptedPasswordLibraries[0].GetPassword(PasswordEntriesListBox_SelectedIndex);
 			Application.Current.Clipboard.SetTextAsync(Encoding.UTF8.GetString(unencryptedPassword));
 		} 
@@ -198,6 +204,7 @@ namespace Boba.AvaloniaDesktop.ViewModels
 			_passwordEntriesListBox_Items = new ObservableCollection<string>();
 			SelectedEntryChanged += OnSelectedEntryChanged;
 			model = new EncryptedPasswordLibraryModel(2048, "name");
+			FilePaths = new List<string?>();
 
 			_applicationTextBlock_Text = "";
 			_usernameTextBlock_Text = "";
