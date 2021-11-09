@@ -65,9 +65,12 @@ namespace Boba.PasswordManager
 		protected virtual void Dispose(bool disposing)
 		{
 			if (_disposed) return;
-			try { if (disposing) PasswordEntries.Clear(); }
-			catch (NullReferenceException) { }
-			_disposed = true;
+			
+			if (disposing) 
+			{
+				if (PasswordEntries != null) PasswordEntries.Clear();
+				_disposed = true;
+			}
 		}
 
 		public void Dispose()

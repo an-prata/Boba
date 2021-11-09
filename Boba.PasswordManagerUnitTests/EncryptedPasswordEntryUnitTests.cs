@@ -24,14 +24,14 @@ namespace Boba.PasswordManagerTests
 			{ "stackoverflow.com", "jakesmith@outlook.com", "#sYfg@sh&*gskks%$#17291$sg%"}
 		};
 
-		private readonly RSACryptoServiceProvider cryptoServiceProvider = new RSACryptoServiceProvider();
+		private readonly RSACryptoServiceProvider cryptoServiceProvider = new();
 
 		[TestMethod]
 		public void ConstructorTest()
 		{
 			for (int i = 0; i < Credentials.GetLength(1); i++)
 			{
-				PasswordEntry passwordEntry = new PasswordEntry()
+				PasswordEntry passwordEntry = new()
 				{
 					Application = Credentials[i, 0],
 					Username = Credentials[i, 1],
@@ -42,7 +42,7 @@ namespace Boba.PasswordManagerTests
 				Assert.AreEqual(Credentials[i, 1], passwordEntry.Username);
 				Assert.AreEqual(Credentials[i, 2], Encoding.UTF8.GetString(passwordEntry.Password));
 
-				EncryptedPasswordEntry encryptedPasswordEntry = new EncryptedPasswordEntry(cryptoServiceProvider, passwordEntry);
+				EncryptedPasswordEntry encryptedPasswordEntry = new(cryptoServiceProvider, passwordEntry);
 
 				Assert.AreEqual(Credentials[i, 0], encryptedPasswordEntry.Application);
 				Assert.AreEqual(Credentials[i, 1], encryptedPasswordEntry.Username);
@@ -51,7 +51,7 @@ namespace Boba.PasswordManagerTests
 
 			for (int i = 0; i < Credentials.GetLength(1); i++)
 			{
-				EncryptedPasswordEntry encryptedPasswordEntry = new EncryptedPasswordEntry(cryptoServiceProvider, Encoding.UTF8.GetBytes(Credentials[i, 2]), Credentials[i, 0], Credentials[i, 1]);
+				EncryptedPasswordEntry encryptedPasswordEntry = new(cryptoServiceProvider, Encoding.UTF8.GetBytes(Credentials[i, 2]), Credentials[i, 0], Credentials[i, 1]);
 
 				Assert.AreEqual(Credentials[i, 0], encryptedPasswordEntry.Application);
 				Assert.AreEqual(Credentials[i, 1], encryptedPasswordEntry.Username);

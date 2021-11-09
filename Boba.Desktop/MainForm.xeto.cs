@@ -46,7 +46,7 @@ namespace Boba.Desktop
 
 		protected void AddPasswordEntryButton_Clicked(object sender, EventArgs e)
 		{
-			using AddPasswordEntryDialog addPasswordEntryDialog = new AddPasswordEntryDialog();
+			using AddPasswordEntryDialog addPasswordEntryDialog = new();
 			addPasswordEntryDialog.ShowModal();
 			CurrentPasswordLibrary.NewEntry(addPasswordEntryDialog.Password, addPasswordEntryDialog.Application, addPasswordEntryDialog.Username);
 			ListBoxEntries.Add(addPasswordEntryDialog.Application);
@@ -89,7 +89,7 @@ namespace Boba.Desktop
 
 		protected void ChangePasswordEntryApplicationButton_Clicked(object sender, EventArgs e)
 		{
-			SingleStringDialogBox newApplicationDialog = new SingleStringDialogBox("Application");
+			SingleStringDialogBox newApplicationDialog = new("Application");
 			newApplicationDialog.ShowModal();
 			CurrentPasswordLibrary.PasswordEntries[PasswordEntriesListBox.SelectedIndex].Application = newApplicationDialog.Result;
 			PasswordEntryApplicationLabel.Text = newApplicationDialog.Result;
@@ -98,7 +98,7 @@ namespace Boba.Desktop
 
 		protected void ChangePasswordEntryUsernameButton_Clicked(object sender, EventArgs e)
 		{
-			SingleStringDialogBox newUsernameDialog = new SingleStringDialogBox("Username");
+			SingleStringDialogBox newUsernameDialog = new("Username");
 			newUsernameDialog.ShowModal();
 			CurrentPasswordLibrary.PasswordEntries[PasswordEntriesListBox.SelectedIndex].Application = newUsernameDialog.Result;
 			PasswordEntryApplicationLabel.Text = newUsernameDialog.Result;
@@ -107,7 +107,7 @@ namespace Boba.Desktop
 
 		protected void ChangePasswordEntryPasswordButton_Clicked(object sender, EventArgs e)
 		{
-			PasswordDialogBox newPasswordDialog = new PasswordDialogBox("Password");
+			PasswordDialogBox newPasswordDialog = new("Password");
 			newPasswordDialog.ShowModal();
 			CurrentPasswordLibrary.PasswordEntries[PasswordEntriesListBox.SelectedIndex].SetPassword(CurrentPasswordLibrary.CryptoServiceProvider, newPasswordDialog.Result);
 			PasswordEntryApplicationLabel.Text = PasswordPlaceholder;

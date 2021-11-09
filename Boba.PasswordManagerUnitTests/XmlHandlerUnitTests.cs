@@ -17,7 +17,7 @@ namespace Boba.PasswordManagerTests
 		[TestMethod]
 		public void SaveAndReadTest()
 		{
-			PasswordEntry passwordEntry = new PasswordEntry(TestBytes, "Google.com", "Jake@gmail.com");
+			PasswordEntry passwordEntry = new(TestBytes, "Google.com", "Jake@gmail.com");
 			XmlHandler.SaveToFile("passwordentry.xml", passwordEntry);
 			Assert.AreEqual(passwordEntry.Username, XmlHandler.ReadFromFile<PasswordEntry>("passwordentry.xml").Username);
 		}

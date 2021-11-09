@@ -36,12 +36,12 @@ namespace Boba.PasswordManagerTests
 		[TestMethod]
 		public void NewEntryTest()
 		{
-			RSACryptoServiceProvider cryptoServiceProvider = new RSACryptoServiceProvider();
-			EncryptedPasswordLibrary encryptedPasswordLibrary = new EncryptedPasswordLibrary(cryptoServiceProvider, "test library", new List<EncryptedPasswordEntry>());
+			RSACryptoServiceProvider cryptoServiceProvider = new();
+			EncryptedPasswordLibrary encryptedPasswordLibrary = new(cryptoServiceProvider, "test library", new List<EncryptedPasswordEntry>());
 
 			for (int i = 0; i < Credentials.GetLength(1); i++)
 			{
-				PasswordEntry passwordEntry = new PasswordEntry()
+				PasswordEntry passwordEntry = new()
 				{
 					Application = SortedCredentials[i, 0],
 					Username = SortedCredentials[i, 1],
@@ -59,9 +59,9 @@ namespace Boba.PasswordManagerTests
 
 		public void SortingTest()
 		{
-			RSACryptoServiceProvider cryptoServiceProvider = new RSACryptoServiceProvider();
-			EncryptedPasswordLibrary passwordLibrary = new EncryptedPasswordLibrary(cryptoServiceProvider, "test library", new List<EncryptedPasswordEntry>());
-			EncryptedPasswordLibrary preSortedPasswordLibrary = new EncryptedPasswordLibrary(cryptoServiceProvider, "test library", new List<EncryptedPasswordEntry>());
+			RSACryptoServiceProvider cryptoServiceProvider = new();
+			EncryptedPasswordLibrary passwordLibrary = new(cryptoServiceProvider, "test library", new List<EncryptedPasswordEntry>());
+			EncryptedPasswordLibrary preSortedPasswordLibrary = new(cryptoServiceProvider, "test library", new List<EncryptedPasswordEntry>());
 
 			for (int i = 0; i < Credentials.GetLength(1); i++) 
 				passwordLibrary.NewEntry(Encoding.UTF8.GetBytes(Credentials[i, 2]), Credentials[i, 1], Credentials[i, 0]);

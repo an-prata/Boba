@@ -19,7 +19,7 @@ namespace Boba.Desktop
 
         protected void SaveKeysButtonMenuItem_Clicked(object sender, EventArgs e)
         {
-            using SaveFileDialog saveKeysDialog = new SaveFileDialog();
+            using SaveFileDialog saveKeysDialog = new();
 
             saveKeysDialog.Title = "Save Public Key";
             saveKeysDialog.ShowDialog(this);
@@ -34,7 +34,7 @@ namespace Boba.Desktop
 
         protected void OpenKeysButtonMenuItem_Clicked(object sender, EventArgs e)
         {
-            OpenFileDialog openKeysDialog = new OpenFileDialog();
+            OpenFileDialog openKeysDialog = new();
             openKeysDialog.ShowDialog(this);
             if (openKeysDialog.FileName == "" || openKeysDialog.FileName == null) return;
             CurrentPasswordLibrary.CryptoServiceProvider = new RSACryptoServiceProvider();
