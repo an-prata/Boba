@@ -16,8 +16,6 @@ namespace Boba.AvaloniaDesktop.ViewModels
 {
     public partial class MainWindowViewModel : ViewModelBase
 	{
-		private const string PasswordPlaceholder = "••••••••••••";
-
 		private string _applicationTextBlock_Text;
 		private string _usernameTextBlock_Text;
 		private string _passwordTextBlock_Text;
@@ -28,7 +26,6 @@ namespace Boba.AvaloniaDesktop.ViewModels
 		private int _passwordEntriesListBox_SelectedIndex;
 		private ObservableCollection<string> _passwordEntriesListBox_Items;
 		private readonly EncryptedPasswordLibraryModel model;
-		private NewEntryDialogViewModel? newEntryDialogViewModel;
 		private NewEntryDialog? newEntryDialog;
 
 		public string ApplicationTextBlock_Text 
@@ -94,7 +91,7 @@ namespace Boba.AvaloniaDesktop.ViewModels
 
 		public void AddEntryButton_Clicked()
 		{
-			newEntryDialogViewModel = new NewEntryDialogViewModel();
+			NewEntryDialogViewModel newEntryDialogViewModel = new(NewEntryDialogViewModel.PasswordsEnabled);
 			newEntryDialog = new NewEntryDialog { DataContext = newEntryDialogViewModel };
 			newEntryDialogViewModel.OnRequestClose += NewEntryDialog_OnRequestClose;
 			newEntryDialog.Show();
@@ -114,8 +111,8 @@ namespace Boba.AvaloniaDesktop.ViewModels
 		{
 			if (model.EncryptedPasswordLibraries[0].CryptoServiceProvider == null) 
 			{
-				var viewModel = new MessageBoxViewModel("No keys to decrypt password, please provide a private key.");
-				var messageBox = new MessageBox() { DataContext = viewModel, Width = 340 };
+				var viewModel = new MessageBoxViewModel(NoPrivateKeyMessage);
+				var messageBox = new MessageBox() { DataContext = viewModel, Width = 480, Height = 140 };
 				viewModel.OnRequestClose += (sender, e) => messageBox.Close();
 				messageBox.Show();
 				return;
@@ -127,31 +124,44 @@ namespace Boba.AvaloniaDesktop.ViewModels
 
 		public void EditEntryButton_Clicked()
 		{
-			string? unencryptedPassword = Encoding.UTF8.GetString(model.EncryptedPasswordLibraries[0].GetPassword(PasswordEntriesListBox_SelectedIndex));;
-			
-			newEntryDialogViewModel = new NewEntryDialogViewModel()
-			{
-				ApplicationTextBox_Text = _applicationTextBlock_Text,
-				UsernameTextBox_Text = _usernameTextBlock_Text,
-				PasswordTextBox_Text = unencryptedPassword,
-				ConfirmPasswordTextBox_Text = unencryptedPassword
-			};
+			NewEntryDialogViewModel newEntryDialogViewModel;
 
-			unencryptedPassword = null;
+			if (model.EncryptedPasswordLibraries[0].CryptoServiceProvider == null)
+			{
+				newEntryDialogViewModel = new(NewEntryDialogViewModel.PasswordsDisabled)
+				{
+					ApplicationTextBox_Text = _applicationTextBlock_Text,
+					UsernameTextBox_Text = _usernameTextBlock_Text,
+					PasswordTextBox_Text = PasswordPlaceholder,
+					ConfirmPasswordTextBox_Text = PasswordPlaceholder
+				};
+			}
+			else
+			{
+				string? unencryptedPassword = Encoding.UTF8.GetString(model.EncryptedPasswordLibraries[0].GetPassword(PasswordEntriesListBox_SelectedIndex));
+				newEntryDialogViewModel = new(NewEntryDialogViewModel.PasswordsEnabled)
+				{
+					ApplicationTextBox_Text = _applicationTextBlock_Text,
+					UsernameTextBox_Text = _usernameTextBlock_Text,
+					PasswordTextBox_Text = unencryptedPassword,
+					ConfirmPasswordTextBox_Text = unencryptedPassword
+				};
+			}
+
 			newEntryDialog = new NewEntryDialog { DataContext = newEntryDialogViewModel };
 			newEntryDialogViewModel.OnRequestClose += EditEntryDialog_OnRequestClose;
 			newEntryDialog.Show();
 		}
 
-		protected void NewEntryDialog_OnRequestClose(object? sender, EventArgs e)
+		protected void NewEntryDialog_OnRequestClose(object? sender, NewEntryDialogOnRequestCloseEventArgs e)
 		{
-			if (newEntryDialogViewModel == null || newEntryDialog == null) throw new NullReferenceException();
+			if (e.NewEntryDialogViewModel == null || newEntryDialog == null) throw new NullReferenceException();
 
 			newEntryDialog.Close();
 
-			if (newEntryDialogViewModel.Canceled) return;
+			if (e.NewEntryDialogViewModel.Canceled) return;
 			
-			model.EncryptedPasswordLibraries[0].NewEntry(newEntryDialogViewModel.PasswordResult, newEntryDialogViewModel.ApplicationResult, newEntryDialogViewModel.UsernameResult);
+			model.EncryptedPasswordLibraries[0].NewEntry(e.NewEntryDialogViewModel.PasswordResult, e.NewEntryDialogViewModel.ApplicationResult, e.NewEntryDialogViewModel.UsernameResult);
 			PasswordEntriesListBox_Items.Clear();
 
 			model.EncryptedPasswordLibraries[0].PasswordEntries.ForEach(delegate(EncryptedPasswordEntry encryptedPasswordEntry)
@@ -160,18 +170,24 @@ namespace Boba.AvaloniaDesktop.ViewModels
 			});
 		}
 
-		protected void EditEntryDialog_OnRequestClose(object? sender, EventArgs e)
+		protected void EditEntryDialog_OnRequestClose(object? sender, NewEntryDialogOnRequestCloseEventArgs e)
 		{
-			if (newEntryDialogViewModel == null || newEntryDialog == null) throw new NullReferenceException();
+			if (e.NewEntryDialogViewModel == null || newEntryDialog == null) throw new NullReferenceException();
 
 			newEntryDialog.Close();
 
-			if (newEntryDialogViewModel.Canceled) return;
+			if (e.NewEntryDialogViewModel.Canceled) return;
 
-			model.EncryptedPasswordLibraries[0].PasswordEntries[_passwordEntriesListBox_SelectedIndex].Application = newEntryDialogViewModel.ApplicationResult;
-			model.EncryptedPasswordLibraries[0].PasswordEntries[_passwordEntriesListBox_SelectedIndex].Username = newEntryDialogViewModel.UsernameResult;
-			model.EncryptedPasswordLibraries[0].PasswordEntries[_passwordEntriesListBox_SelectedIndex].SetPassword(model.EncryptedPasswordLibraries[0].CryptoServiceProvider, newEntryDialogViewModel.PasswordResult);
-			PasswordEntriesListBox_Items[_passwordEntriesListBox_SelectedIndex] = newEntryDialogViewModel.ApplicationResult;
+			model.EncryptedPasswordLibraries[0].PasswordEntries[_passwordEntriesListBox_SelectedIndex].Application = e.NewEntryDialogViewModel.ApplicationResult;
+			model.EncryptedPasswordLibraries[0].PasswordEntries[_passwordEntriesListBox_SelectedIndex].Username = e.NewEntryDialogViewModel.UsernameResult;
+
+			if (!e.NoPrivateKey)
+			{
+				model.EncryptedPasswordLibraries[0].PasswordEntries[_passwordEntriesListBox_SelectedIndex].SetPassword(
+					model.EncryptedPasswordLibraries[0].CryptoServiceProvider, e.NewEntryDialogViewModel.PasswordResult);
+			} 
+
+			PasswordEntriesListBox_Items[_passwordEntriesListBox_SelectedIndex] = e.NewEntryDialogViewModel.ApplicationResult;
 			EventHandler eventHandler = SelectedEntryChanged;
 			eventHandler.Invoke(this, new EventArgs());
 		}
@@ -180,7 +196,7 @@ namespace Boba.AvaloniaDesktop.ViewModels
 		{
 			if (PasswordEntriesListBox_SelectedIndex == -1)
 			{
-				ApplicationTextBlock_Text = Convert.ToString(PasswordEntriesListBox_SelectedIndex);
+				ApplicationTextBlock_Text = "";
 				UsernameTextBlock_Text = "";
 				PasswordTextBlock_Text = "";
 				EditEntryButton_IsEnabled = false;

@@ -4,8 +4,6 @@ VisualStudioVersion = 16.0.31424.327
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Boba.PasswordManager", "Boba.PasswordManager\Boba.PasswordManager.csproj", "{9D514172-5BB9-4554-B44E-28F360FFDE44}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Boba.CLI", "Boba.CLI\Boba.CLI.csproj", "{C9A0455E-1EC8-48F4-97BF-E972FEC2A213}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Boba.Desktop", "Boba.Desktop\Boba.Desktop.csproj", "{D7FC084B-7E76-4A23-9D5B-60B7857E75BD}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Boba.PasswordManagerUnitTests", "Boba.PasswordManagerUnitTests\Boba.PasswordManagerUnitTests.csproj", "{E2DE30CE-3DC6-45DA-8888-38D70F7B8750}"
