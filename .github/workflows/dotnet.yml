@@ -25,9 +25,6 @@ jobs:
     - name: Build Boba.PasswordManager
       run: dotnet build ${{github.workspace}}/Boba.PasswordManager/Boba.PasswordManager.csproj --no-restore
 
-    - name: Build Boba.CLI
-      run: dotnet build ${{github.workspace}}/Boba.CLI/Boba.CLI.csproj --no-restore
-
     - name: Build Boba.Desktop
       run: dotnet build ${{github.workspace}}/Boba.Desktop/Boba.Desktop.csproj --no-restore
 
