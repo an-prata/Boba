@@ -17,10 +17,12 @@
 		<TextBox Text="{Binding UsernameTextBox_Text}" Watermark="Username/Email"/>
 		<TextBox Text="{Binding PasswordTextBox_Text}"
 				 Watermark="Password" 
-				 PasswordChar="•"/>
+				 PasswordChar="•"
+				 IsEnabled="{Binding PasswordTextBox_IsEnabled}"/>
 		<TextBox Text="{Binding ConfirmPasswordTextBox_Text}"
 				 Watermark="Confirm" 
-				 PasswordChar="•"/>
+				 PasswordChar="•"
+				 IsEnabled="{Binding ConfirmPasswordTextBox_IsEnabled}"/>
 		<TextBlock Text="{Binding PasswordsMatchTextBlock_Text}" 
 				   HorizontalAlignment="Center"
 				   Foreground="{Binding PasswordMatchTextBlock_Foreground}"/>

@@ -19,16 +19,19 @@
 		<DockPanel Grid.Row="0" Grid.Column="0">
 			<Menu DockPanel.Dock="Top">
 				<MenuItem Header="_File" FontSize="12">
-					<MenuItem Header="_Open..." Command="{Binding OpenMenuItem_Clicked}"/>
-					<MenuItem Header="_New..." Command="{Binding NewMenuItem_Clicked}"/>
-					<MenuItem Header="_Save" Command="{Binding SaveMenuItem_Clicked}"/>
-					<MenuItem Header="S_ave As..." Command="{Binding SaveAsMenuItem_Clicked}"/>
+					<MenuItem Header="_Open ..." Command="{Binding OpenMenuItem_Clicked}"/>
+					<MenuItem Header="_New ..." Command="{Binding NewMenuItem_Clicked}"/>
+					<MenuItem Header="_Save " Command="{Binding SaveMenuItem_Clicked}"/>
+					<MenuItem Header="S_ave As ..." Command="{Binding SaveAsMenuItem_Clicked}"/>
 				</MenuItem>
 
 				<MenuItem Header="_Library" FontSize="12">
 				</MenuItem>
 
 				<MenuItem Header="_Keys" FontSize="12">
+					<MenuItem Header="Export Public Key ..." Command="{Binding ExportPublicKeyMenuItem_Clicked}"/>
+					<MenuItem Header="Export Private Key ..." Command="{Binding ExportPrivateKeyMenuItem_Clicked}"/>
+					<MenuItem Header="Import Private Key ..." Command="{Binding ImportPrivateKeyMenuItem_Clicked}"/>
 				</MenuItem>
 			</Menu>
 		</DockPanel>
@@ -79,12 +82,13 @@
 				<Button Command="{Binding CopyApplicationButton_Clicked}" 
 						HorizontalAlignment="Stretch" 
 						HorizontalContentAlignment="Center" 
-						Margin="0, 0, 0, 90"
+						Margin="0, 40, 0, 90"
 						Width="240"
 						IsEnabled="{Binding CopyApplicationButton_IsEnabled}"> Copy Application/Site </Button>
 				<Button Command="{Binding CopyUsernameButton_Clicked}" 
 						HorizontalAlignment="Stretch" 
 						HorizontalContentAlignment="Center" 
+						Margin="0, 0, 0, 30"
 						Width="240"
 						IsEnabled="{Binding CopyUsernameButton_IsEnabled}"> Copy Username/Email </Button>
 				<Button Command="{Binding CopyPasswordButton_Clicked}" 

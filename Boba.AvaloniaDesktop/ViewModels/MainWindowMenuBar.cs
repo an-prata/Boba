@@ -14,16 +14,24 @@ namespace Boba.AvaloniaDesktop.ViewModels
 {
     public partial class MainWindowViewModel : ViewModelBase
 	{
+		private readonly FileDialogFilter XmlFileFilter = new() { Extensions = { ".xml" }, Name = "XML" };
+		private readonly FileDialogFilter JsonFileFilter = new() { Extensions = { ".json" }, Name = "JSON" };
 		public List<string?> FilePaths { get; set; }
 
 		public async void OpenMenuItem_Clicked()
 		{
 			if (Application.Current.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
 			{
-				string[]? files = await new OpenFileDialog().ShowAsync(desktop.MainWindow);
+				string[]? files = await new OpenFileDialog()
+				{
+					Title = "OpenLibrary ...",
+					AllowMultiple = false,
+					Filters = new List<FileDialogFilter> { JsonFileFilter }
+				}.ShowAsync(desktop.MainWindow);
 				if (files == null) { return; }
 
-				FilePaths[0] = files[0];
+				FilePaths.Clear();
+				FilePaths.Add(files[0]);
 				model.EncryptedPasswordLibraries[0] = JsonHandler.ReadFromFile<EncryptedPasswordLibrary>(files[0]);
 				PasswordEntriesListBox_Items.Clear();
 
@@ -37,7 +45,7 @@ namespace Boba.AvaloniaDesktop.ViewModels
 		public void NewMenuItem_Clicked()
 		{
 			model.EncryptedPasswordLibraries[0] = new EncryptedPasswordLibrary(new RSACryptoServiceProvider(), "untitled", new List<EncryptedPasswordEntry>());
-			FilePaths[0] = null;
+			FilePaths.Clear();
 			PasswordEntriesListBox_Items.Clear();
 
 			model.EncryptedPasswordLibraries[0].PasswordEntries.ForEach(delegate(EncryptedPasswordEntry encryptedPasswordEntry)
@@ -48,7 +56,7 @@ namespace Boba.AvaloniaDesktop.ViewModels
 
 		public void SaveMenuItem_Clicked()
 		{
-			if (FilePaths[0] == null)
+			if (FilePaths.Count == 0 || FilePaths[0] == null)
 			{
 				SaveAsMenuItem_Clicked();
 				return;
@@ -61,11 +69,61 @@ namespace Boba.AvaloniaDesktop.ViewModels
 		{
 			if (Application.Current.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
 			{
-				string? fileName = await new SaveFileDialog().ShowAsync(desktop.MainWindow);
+				string? fileName = await new SaveFileDialog()
+				{
+					Title = "Save Library As ...",
+					Filters = new List<FileDialogFilter> { JsonFileFilter }
+				}.ShowAsync(desktop.MainWindow);
 				if (fileName == null) { return; }
-				FilePaths[0] = fileName;
+				FilePaths.Clear();
 				JsonHandler.SaveToFile(fileName, model.EncryptedPasswordLibraries[0]);
 			}
+		}
+
+		public async void ExportPublicKeyMenuItem_Clicked()
+		{
+			if (Application.Current.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+			{
+				string? fileName = await new SaveFileDialog()
+				{
+					Title = "Export Public Key ...",
+					Filters = new List<FileDialogFilter> { XmlFileFilter }
+				}.ShowAsync(desktop.MainWindow);
+				if (fileName == null) { return; }
+				XmlHandler.SaveToFile(fileName, model.EncryptedPasswordLibraries[0].CryptoServiceProvider.ExportParameters(false));
+			}
+		}
+
+		public async void ExportPrivateKeyMenuItem_Clicked()
+		{
+			if (Application.Current.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+			{
+				string? fileName = await new SaveFileDialog()
+				{
+					Title = "Export Private Key ...",
+					Filters = new List<FileDialogFilter> { XmlFileFilter }
+				}.ShowAsync(desktop.MainWindow);
+				if (fileName == null) { return; }
+				XmlHandler.SaveToFile(fileName, model.EncryptedPasswordLibraries[0].CryptoServiceProvider.ExportParameters(true));
+			}
+		}
+
+		public async void ImportPrivateKeyMenuItem_Clicked()
+		{
+			if (Application.Current.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+			{
+				string[]? files = await new OpenFileDialog()
+				{  
+					Title = "Import Private Key ...",
+					AllowMultiple = false,
+					Filters = new List<FileDialogFilter> { XmlFileFilter }
+				}.ShowAsync(desktop.MainWindow);
+				if (files == null) { return; }
+
+                RSACryptoServiceProvider cryptoServiceProvider = new();
+                cryptoServiceProvider.ImportParameters(XmlHandler.ReadFromFile<RSAParameters>(files[0]));
+                model.EncryptedPasswordLibraries[0].CryptoServiceProvider = cryptoServiceProvider;
+            }
 		}
 	}
 }
