@@ -14,7 +14,7 @@ namespace Boba.AvaloniaDesktop.Models
 {
 	public class EncryptedPasswordLibraryModel
 	{
-		private readonly PasswordLibraryComparer libraryComparer = new PasswordLibraryComparer();
+		private readonly PasswordLibraryComparer libraryComparer = new();
 		private List<EncryptedPasswordLibrary> _encryptedPasswordLibraries;
 
 		/// <summary>

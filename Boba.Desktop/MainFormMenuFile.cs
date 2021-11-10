@@ -21,7 +21,7 @@ namespace Boba.Desktop
 
 		protected void OpenButtonMenuItem_Clicked(object sender, EventArgs e)
 		{
-			using OpenFileDialog openFileDialog = new OpenFileDialog() { Title = "Open Password Library", CurrentFilter = new FileFilter("Json", ".json") };
+			using OpenFileDialog openFileDialog = new() { Title = "Open Password Library", CurrentFilter = new FileFilter("Json", ".json") };
 			DialogResult dialogResult = openFileDialog.ShowDialog(this);
 			if (openFileDialog.FileName == "" || openFileDialog.FileName == null) return;
 			CurrentPasswordLibrary = JsonHandler.ReadFromFile<EncryptedPasswordLibrary>(openFileDialog.FileName);
@@ -35,7 +35,7 @@ namespace Boba.Desktop
 
 		protected void NewButtonMenuItem_Clicked(object sender, EventArgs e)
 		{
-			using NewPasswordLibraryDialog newPasswordLibraryDialog = new NewPasswordLibraryDialog() { Title = "New Password Library" };
+			using NewPasswordLibraryDialog newPasswordLibraryDialog = new() { Title = "New Password Library" };
 			newPasswordLibraryDialog.ShowModal();
 			CurrentPasswordLibrary = newPasswordLibraryDialog.Result;
 			PasswordEntriesListBox.DataStore = new SortedSet<string>();
@@ -57,7 +57,7 @@ namespace Boba.Desktop
 
 		protected void SaveAsButtonMenuItem_Clicked(object sender, EventArgs e)
 		{
-			using SaveFileDialog saveFileDialog = new SaveFileDialog() { Title = "Save Password Library As", CurrentFilter = new FileFilter("Json", ".json") };
+			using SaveFileDialog saveFileDialog = new() { Title = "Save Password Library As", CurrentFilter = new FileFilter("Json", ".json") };
 			DialogResult dialogResult = saveFileDialog.ShowDialog(this);
 			if (saveFileDialog.FileName == "" || saveFileDialog.FileName == null) return;
 			JsonHandler.SaveToFile(saveFileDialog.FileName, CurrentPasswordLibrary);
@@ -69,7 +69,7 @@ namespace Boba.Desktop
 
 		protected void RenameLibraryButtonMenuItem_Clicked(object sender, EventArgs e)
         {
-			SingleStringDialogBox renameDialogBox = new SingleStringDialogBox("Rename Library");
+			SingleStringDialogBox renameDialogBox = new("Rename Library");
 			renameDialogBox.ShowModal();
 			CurrentPasswordLibrary.Name = renameDialogBox.Result;
 			Title = CurrentPasswordLibrary.Name;
