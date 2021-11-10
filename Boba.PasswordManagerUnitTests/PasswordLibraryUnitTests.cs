@@ -36,8 +36,8 @@ namespace Boba.PasswordManagerTests
 		[TestMethod]
 		public void SortingTest()
 		{
-			using PasswordLibrary passwordLibrary = new PasswordLibrary("test library", new List<PasswordEntry>());
-			using PasswordLibrary preSortedPasswordLibrary = new PasswordLibrary("test library", new List<PasswordEntry>());
+			using PasswordLibrary passwordLibrary = new("test library", new List<PasswordEntry>());
+			using PasswordLibrary preSortedPasswordLibrary = new("test library", new List<PasswordEntry>());
 
 			for (int i = 0; i < Credentials.GetLength(1); i++) 
 				passwordLibrary.NewEntry(Encoding.UTF8.GetBytes(Credentials[i, 2]), Credentials[i, 1], Credentials[i, 0]);

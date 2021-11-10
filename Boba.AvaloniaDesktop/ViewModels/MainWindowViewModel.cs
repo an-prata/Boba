@@ -16,6 +16,7 @@ namespace Boba.AvaloniaDesktop.ViewModels
 {
     public partial class MainWindowViewModel : ViewModelBase
 	{
+		private string _title;
 		private string _applicationTextBlock_Text;
 		private string _usernameTextBlock_Text;
 		private string _passwordTextBlock_Text;
@@ -28,6 +29,11 @@ namespace Boba.AvaloniaDesktop.ViewModels
 		private readonly EncryptedPasswordLibraryModel model;
 		private NewEntryDialog? newEntryDialog;
 
+		public string Title
+		{
+			get => _title;
+			set => this.RaiseAndSetIfChanged(ref _title, value);
+		}
 		public string ApplicationTextBlock_Text 
 		{ 
 			get => _applicationTextBlock_Text; 
@@ -221,6 +227,7 @@ namespace Boba.AvaloniaDesktop.ViewModels
 			SelectedEntryChanged += OnSelectedEntryChanged;
 			model = new EncryptedPasswordLibraryModel(2048, "name");
 			FilePaths = new List<string?>();
+			_title = "Untitled";
 
 			_applicationTextBlock_Text = "";
 			_usernameTextBlock_Text = "";

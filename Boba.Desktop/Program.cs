@@ -10,7 +10,7 @@ namespace Boba.Desktop
     class Program
     {
         [STAThread]
-        static void Main(string[] args)
+        static void Main()
         {
             new Application(Eto.Platform.Detect).Run(new MainForm());
         }

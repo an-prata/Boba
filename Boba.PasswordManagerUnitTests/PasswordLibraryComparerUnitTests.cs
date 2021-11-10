@@ -17,24 +17,8 @@ namespace Boba.PasswordManagerUnitTests
 		//private readonly string[] Usernames = { "jake@gmail.com", "jake", "jakemiester1234", "jakesmith@outlook.com" };
 		//private readonly string[] Passwords = { "jakesSuperStrongPassword", "Password12345", "TheBatmanEmoji", "#sYfg@sh&*gskks%$#17291$sg%" };
 
-		private static readonly string[,] Credentials = 
-		{
-			{ "google.com", "jake@gmail.com", "jakesSuperStrongPassword" },
-			{ "docs.microsoft.com", "jake", "Password12345" },
-			{ "github.com", "jakemiester1234", "TheBatmanEmoji"},
-			{ "stackoverflow.com", "jakesmith@outlook.com", "#sYfg@sh&*gskks%$#17291$sg%"}
-		};
-
-		private static readonly string[,] SortedCredentials = 
-		{
-			{ "docs.microsoft.com", "jake", "Password12345" },
-			{ "github.com", "jakemiester1234", "TheBatmanEmoji"},
-			{ "google.com", "jake@gmail.com", "jakesSuperStrongPassword" },
-			{ "stackoverflow.com", "jakesmith@outlook.com", "#sYfg@sh&*gskks%$#17291$sg%"}
-		};
-
-		private readonly List<PasswordLibrary> SortedPasswordLibraries = new List<PasswordLibrary>
-		{
+		private readonly List<PasswordLibrary> SortedPasswordLibraries = new()
+        {
 			new PasswordLibrary("A library", new List<PasswordEntry>()),
             new PasswordLibrary("bussines passwords", new List<PasswordEntry>()),
             new PasswordLibrary("google suite", new List<PasswordEntry>()),
@@ -55,7 +39,7 @@ namespace Boba.PasswordManagerUnitTests
 		{
 			Comparer<PasswordLibrary> passwordLibraryComparer = new PasswordLibraryComparer();
             
-            List<EncryptedPasswordLibrary> encryptedPasswordLibraries = new List<EncryptedPasswordLibrary>
+            List<EncryptedPasswordLibrary> encryptedPasswordLibraries = new()
             {
                 new EncryptedPasswordLibrary(new RSACryptoServiceProvider(), "A library", new List<EncryptedPasswordEntry>()),
                 new EncryptedPasswordLibrary(new RSACryptoServiceProvider(), "bussines passwords", new List<EncryptedPasswordEntry>()),
@@ -63,9 +47,9 @@ namespace Boba.PasswordManagerUnitTests
                 new EncryptedPasswordLibrary(new RSACryptoServiceProvider(), "personal", new List<EncryptedPasswordEntry>())
             };
 
-			Assert.AreEqual(passwordLibraryComparer.Compare(SortedPasswordLibraries[0], SortedPasswordLibraries[1]), -1);
-			Assert.AreEqual(passwordLibraryComparer.Compare(SortedPasswordLibraries[1], SortedPasswordLibraries[0]), 1);
-			Assert.AreEqual(passwordLibraryComparer.Compare(SortedPasswordLibraries[2], SortedPasswordLibraries[2]), 0);
+			Assert.AreEqual(passwordLibraryComparer.Compare(encryptedPasswordLibraries[0], encryptedPasswordLibraries[1]), -1);
+			Assert.AreEqual(passwordLibraryComparer.Compare(encryptedPasswordLibraries[1], encryptedPasswordLibraries[0]), 1);
+			Assert.AreEqual(passwordLibraryComparer.Compare(encryptedPasswordLibraries[2], encryptedPasswordLibraries[2]), 0);
 		}
 	}
 }

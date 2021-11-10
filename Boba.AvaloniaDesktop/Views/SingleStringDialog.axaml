@@ -1,0 +1,17 @@
+<Window xmlns="https://github.com/avaloniaui"
+    	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    	mc:Ignorable="d" d:DesignWidth="240" d:DesignHeight="180"
+    	x:Class="Boba.AvaloniaDesktop.Views.SingleStringDialog"
+    	Title="SingleStringDialog"
+		Width="240"
+	    Height="120"
+		Topmost="true"
+	    CanResize="false">
+
+		<StackPanel Spacing="10" Margin="10">
+			<TextBox Text="{Binding SingleStringTextBox_Text}" Margin="0, 10, 0, 10"/>
+			<Button Command="{Binding OkButton_Clicked}" Width="40" HorizontalAlignment="Right" VerticalAlignment="Bottom" HorizontalContentAlignment="Center"> Ok </Button>
+		</StackPanel>
+</Window>

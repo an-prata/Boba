@@ -2,6 +2,7 @@
 // Copyright (c) 2021 Evan Overman (https://github.com/an-prata)
 // Licensed under the MIT License.
 
+using System;
 using System.Text.Json.Serialization;
 
 namespace Boba.PasswordManager
@@ -20,7 +21,7 @@ namespace Boba.PasswordManager
 		{
 			Application = "";
 			Username = "";
-			Password = new byte[0];
+			Password = Array.Empty<byte>();
 		}
 
 		/// <summary>

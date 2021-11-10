@@ -12,8 +12,8 @@ namespace Boba.PasswordManager.FileHandling
 	{
 		public static void SaveToFile(string filePath, object value)
 		{
-			using FileStream fileStream = new FileStream(filePath, FileMode.Create);
-			JsonSerializerOptions jsonSerializerOptions = new JsonSerializerOptions() { WriteIndented = true };
+			using FileStream fileStream = new(filePath, FileMode.Create);
+			JsonSerializerOptions jsonSerializerOptions = new() { WriteIndented = true };
 			byte[] bytes = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(value, value.GetType(), jsonSerializerOptions));
 			fileStream.Write(bytes, 0, bytes.Length);
 		}

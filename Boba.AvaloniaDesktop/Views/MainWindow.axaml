@@ -6,7 +6,7 @@
 		mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
 		x:Class="Boba.AvaloniaDesktop.Views.MainWindow"
 		Icon="/Assets/avalonia-logo.ico"
-		Title="Boba.AvaloniaDesktop"
+		Title="{Binding Title}"
 		MinWidth="780"
 		MinHeight="400">
 
@@ -26,6 +26,7 @@
 				</MenuItem>
 
 				<MenuItem Header="_Library" FontSize="12">
+					<MenuItem Header="_Rename ..." Command="{Binding RenameMenuItem_Clicked}"/>
 				</MenuItem>
 
 				<MenuItem Header="_Keys" FontSize="12">

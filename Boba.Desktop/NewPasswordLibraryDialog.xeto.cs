@@ -30,7 +30,7 @@ namespace Boba.Desktop
         {
 			try 
 			{
-				using RSACryptoServiceProvider cryptoServiceProvider = new RSACryptoServiceProvider(Convert.ToInt32(KeySizeTextBox.Text));
+				using RSACryptoServiceProvider cryptoServiceProvider = new(Convert.ToInt32(KeySizeTextBox.Text));
 				Result = new EncryptedPasswordLibrary(cryptoServiceProvider, Name, new List<EncryptedPasswordEntry>());
 				Close();
 			}

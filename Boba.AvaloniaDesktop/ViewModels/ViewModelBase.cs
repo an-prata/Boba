@@ -8,8 +8,10 @@ namespace Boba.AvaloniaDesktop.ViewModels
 {
 	public class ViewModelBase : ReactiveObject
 	{
+		protected const string NoNameGivenMessage = "No name given, please provide a name.";
 		protected const string PasswordPlaceholder = "••••••••••••";
 		protected const string PasswordsDontMatchMessage = "Passwords Dont Match! >:(";
 		protected const string NoPrivateKeyMessage = "No key to decrypt password, please import a private key. \n(Keys > Import Private Key).";
+		protected const string PlatformNotSupportedMessage = "Mobile platforms are not currently supported.";
 	}
 }
