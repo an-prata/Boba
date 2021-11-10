@@ -11,7 +11,6 @@ namespace Boba.PasswordManager
 {
 	public class EncryptedPasswordLibrary : PasswordLibrary
 	{
-		bool _disposed = false;
 		private List<EncryptedPasswordEntry> _encryptedPasswordEntries;
 
 		/// <summary>
@@ -101,25 +100,6 @@ namespace Boba.PasswordManager
 		{
 			Name = name;
 			PasswordEntries = passwordEntries;
-		}
-
-		protected virtual new void Dispose(bool disposing)
-		{
-			if (_disposed) return;
-			try { if (disposing) PasswordEntries.Clear(); }
-			catch (NullReferenceException) { }
-			_disposed = true;
-		}
-
-		public new void Dispose()
-		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		~EncryptedPasswordLibrary()
-		{
-			Dispose(disposing: false);
 		}
 	}
 }
