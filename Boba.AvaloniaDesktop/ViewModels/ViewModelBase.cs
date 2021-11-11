@@ -15,6 +15,8 @@ namespace Boba.AvaloniaDesktop.ViewModels
 		protected const string NoNameGivenMessage = "No name given, please provide a name.";
 		protected const string PasswordPlaceholder = "••••••••••••";
 		protected const string PasswordsDontMatchMessage = "Passwords Dont Match! >:(";
+		protected const string JsonExceptionMessage = "There was an error interpreting your password library file.\nMake sure you are opening a file made by this app.";
+		protected const string XmlExceptionMessage = "There was an error interpreting your private key file.\nMake sure you are opening a file made by this app.";
 		protected const string NoPrivateKeyMessage = "No key to decrypt password, please import a private key. \n(Keys > Import Private Key).";
 		protected const string PlatformNotSupportedMessage = "Mobile platforms are not currently supported.";
 	}

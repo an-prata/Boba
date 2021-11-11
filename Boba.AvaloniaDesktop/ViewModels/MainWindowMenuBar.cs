@@ -3,6 +3,7 @@
 // Licensed under the MIT License.
 
 using System;
+using System.Text.Json;
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using Avalonia;
@@ -16,8 +17,8 @@ namespace Boba.AvaloniaDesktop.ViewModels
 {
     public partial class MainWindowViewModel : ViewModelBase
 	{
-		private readonly FileDialogFilter XmlFileFilter = new() { Extensions = { ".xml" }, Name = "XML" };
-		private readonly FileDialogFilter JsonFileFilter = new() { Extensions = { ".json" }, Name = "JSON" };
+		private readonly FileDialogFilter XmlFileFilter = new() { Extensions = { "xml" }, Name = "XML" };
+		private readonly FileDialogFilter JsonFileFilter = new() { Extensions = { "json" }, Name = "JSON" };
 		public List<string?> FilePaths { get; set; }
 
 		public async void OpenMenuItem_Clicked()
@@ -34,8 +35,17 @@ namespace Boba.AvaloniaDesktop.ViewModels
 
 				FilePaths.Clear();
 				FilePaths.Add(files[0]);
-				
-				model.EncryptedPasswordLibraries[0] = JsonHandler.ReadFromFile<EncryptedPasswordLibrary>(files[0]);
+
+				try { model.EncryptedPasswordLibraries[0] = JsonHandler.ReadFromFile<EncryptedPasswordLibrary>(files[0]); }
+				catch (JsonException)
+				{
+					var viewModel = new MessageBoxViewModel(JsonExceptionMessage);
+					var messageBox = new MessageBox() { DataContext = viewModel, Width = 480, Height = 140 };
+					viewModel.OnRequestClose += (sender, e) => messageBox.Close();
+					messageBox.Show();
+					return;
+				}
+
 				Title = model.EncryptedPasswordLibraries[0].Name;
 				PasswordEntriesListBox_Items.Clear();
 
@@ -128,7 +138,17 @@ namespace Boba.AvaloniaDesktop.ViewModels
 				if (files == null) return;
 
                 RSACryptoServiceProvider cryptoServiceProvider = new();
-                cryptoServiceProvider.ImportParameters(XmlHandler.ReadFromFile<RSAParameters>(files[0]));
+
+                try { cryptoServiceProvider.ImportParameters(XmlHandler.ReadFromFile<RSAParameters>(files[0])); } 
+				catch (InvalidOperationException) 
+				{
+					var viewModel = new MessageBoxViewModel(XmlExceptionMessage);
+					var messageBox = new MessageBox() { DataContext = viewModel, Width = 480, Height = 140 };
+					viewModel.OnRequestClose += (sender, e) => messageBox.Close();
+					messageBox.Show();
+					return;
+				}
+
                 model.EncryptedPasswordLibraries[0].CryptoServiceProvider = cryptoServiceProvider;
             }
 		}

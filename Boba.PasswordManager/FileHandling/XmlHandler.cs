@@ -2,6 +2,7 @@
 // Copyright (c) 2021 Evan Overman (https://github.com/an-prata)
 // Licensed under the MIT License.
 
+using System;
 using System.IO;
 using System.Xml.Serialization;
 
@@ -20,7 +21,8 @@ namespace Boba.PasswordManager.FileHandling
 		{
 			using FileStream fileStream = new(filePath, FileMode.Open);
 			XmlSerializer xmlSerializer = new(typeof(TValue));
-			return (TValue)xmlSerializer.Deserialize(fileStream);
+			try { return (TValue)xmlSerializer.Deserialize(fileStream); }
+			catch (InvalidOperationException) { throw; }
 		}
 	}
 }
