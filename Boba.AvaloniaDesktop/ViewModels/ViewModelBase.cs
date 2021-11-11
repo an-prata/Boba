@@ -12,7 +12,8 @@ namespace Boba.AvaloniaDesktop.ViewModels
 		protected const string DefaultApplicationName = "Untitled";
 		protected const string DefaultUsername = "No Username";
 		protected const string DefaultPassword = "No Password";
-		protected const string NoNameGivenMessage = "No name given, please provide a name.";
+		protected const string NoStringGivenMessage = "No text given.";
+		protected const string NotValidKeySize = "Key Size was not valid.";
 		protected const string PasswordPlaceholder = "••••••••••••";
 		protected const string PasswordsDontMatchMessage = "Passwords Dont Match! >:(";
 		protected const string JsonExceptionMessage = "There was an error interpreting your password library file.\nMake sure you are opening a file made by this app.";

@@ -56,19 +56,43 @@ namespace Boba.AvaloniaDesktop.ViewModels
 			}
 		}
 
-		public void NewMenuItem_Clicked()
+		public async void NewMenuItem_Clicked()
 		{
-			model.EncryptedPasswordLibraries[0] = new EncryptedPasswordLibrary(new RSACryptoServiceProvider(), 
-																			   DefaultLibraryName, 
-																			   new List<EncryptedPasswordEntry>());													   
-			FilePaths.Clear();
-			Title = model.EncryptedPasswordLibraries[0].Name;
-			PasswordEntriesListBox_Items.Clear();
-
-			model.EncryptedPasswordLibraries[0].PasswordEntries.ForEach(delegate(EncryptedPasswordEntry encryptedPasswordEntry)
+			if (Application.Current.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
 			{
-				PasswordEntriesListBox_Items.Add(encryptedPasswordEntry.Application);
-			});
+				var viewModel = new SingleStringDialogViewModel() { IntegerMode = true };
+				var keySizeDialog = new SingleStringDialog() { Title = "Enter Key Size", DataContext = viewModel };
+				viewModel.OnRequestClose += (sender, e) => keySizeDialog.Close();
+				await keySizeDialog.ShowDialog(desktop.MainWindow);
+
+				foreach (KeySizes keySizes in model.EncryptedPasswordLibraries[0].CryptoServiceProvider.LegalKeySizes)
+				{
+					for (int i = keySizes.MinSize; i <= keySizes.MaxSize; i += keySizes.SkipSize)
+					{
+						if (i == viewModel.IntegerResult)
+						{
+							model.EncryptedPasswordLibraries[0] = new EncryptedPasswordLibrary(new RSACryptoServiceProvider(viewModel.IntegerResult), 
+																				DefaultLibraryName, 
+																				new List<EncryptedPasswordEntry>());													   
+							FilePaths.Clear();
+							Title = model.EncryptedPasswordLibraries[0].Name;
+							PasswordEntriesListBox_Items.Clear();
+
+							model.EncryptedPasswordLibraries[0].PasswordEntries.ForEach(delegate(EncryptedPasswordEntry encryptedPasswordEntry)
+							{
+								PasswordEntriesListBox_Items.Add(encryptedPasswordEntry.Application);
+							});
+
+							return;
+						}
+					}
+				}
+
+				var messageBoxViewModel = new MessageBoxViewModel(NotValidKeySize);
+				var messageBox = new MessageBox() { DataContext = messageBoxViewModel };
+				messageBoxViewModel.OnRequestClose += (sender, e) => messageBox.Close();
+				await messageBox.ShowDialog(desktop.MainWindow);
+			}
 		}
 
 		public void SaveMenuItem_Clicked()

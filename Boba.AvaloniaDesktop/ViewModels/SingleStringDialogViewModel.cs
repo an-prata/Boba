@@ -20,7 +20,9 @@ namespace Boba.AvaloniaDesktop.ViewModels
             set => this.RaiseAndSetIfChanged(ref _singleStringTextBox_Text, value); 
         }
 
-        public string Result { get; set; }
+        public bool IntegerMode { get; set; } = false;
+        public string Result { get; private set; }
+        public int IntegerResult { get; private set; }
 
 		/// <summary>
 		/// Invoked when the window should be closed.
@@ -33,7 +35,7 @@ namespace Boba.AvaloniaDesktop.ViewModels
             {
                 if (_singleStringTextBox_Text == "")
                 {
-                    var viewModel = new MessageBoxViewModel(NoNameGivenMessage);
+                    var viewModel = new MessageBoxViewModel(NoStringGivenMessage);
                     var messageBox = new MessageBox() { DataContext = viewModel };
                     viewModel.OnRequestClose += (sender, e) => messageBox.Close();
                     messageBox.ShowDialog(desktop.MainWindow);
@@ -43,6 +45,11 @@ namespace Boba.AvaloniaDesktop.ViewModels
             else throw new PlatformNotSupportedException(PlatformNotSupportedMessage);
             
             Result = _singleStringTextBox_Text;
+
+            if (IntegerMode)
+            {
+                IntegerResult = Convert.ToInt32(_singleStringTextBox_Text);
+            }
 
 			try { OnRequestClose!(this, new EventArgs()); }
 			catch (NullReferenceException) { throw; }
