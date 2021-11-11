@@ -29,7 +29,7 @@ namespace Boba.PasswordManager
 		{
 			Application = "";
 			Username = "";
-			_password = Array.Empty<byte>();
+			_password = null;
 		}
 
 		/// <summary>
@@ -41,7 +41,7 @@ namespace Boba.PasswordManager
 		{
 			Application = passwordEntry.Application;
 			Username = passwordEntry.Username;
-			_password = cryptoServiceProvider.Encrypt(passwordEntry.Password, UseOAEPPadding);
+			_password = passwordEntry.Password == null ? null : cryptoServiceProvider.Encrypt(passwordEntry.Password, UseOAEPPadding);
 		}
 
 		/// <summary>
@@ -55,7 +55,7 @@ namespace Boba.PasswordManager
 		{
 			Application = application;
 			Username = username;
-			_password = cryptoServiceProvider.Encrypt(password, UseOAEPPadding);
+			_password = password == null ? null : cryptoServiceProvider.Encrypt(password, UseOAEPPadding);
 		}
 
 		/// <summary>

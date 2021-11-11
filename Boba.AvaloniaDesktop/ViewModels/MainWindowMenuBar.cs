@@ -34,7 +34,9 @@ namespace Boba.AvaloniaDesktop.ViewModels
 
 				FilePaths.Clear();
 				FilePaths.Add(files[0]);
+				
 				model.EncryptedPasswordLibraries[0] = JsonHandler.ReadFromFile<EncryptedPasswordLibrary>(files[0]);
+				Title = model.EncryptedPasswordLibraries[0].Name;
 				PasswordEntriesListBox_Items.Clear();
 
 				model.EncryptedPasswordLibraries[0].PasswordEntries.ForEach(delegate(EncryptedPasswordEntry encryptedPasswordEntry)
@@ -46,8 +48,11 @@ namespace Boba.AvaloniaDesktop.ViewModels
 
 		public void NewMenuItem_Clicked()
 		{
-			model.EncryptedPasswordLibraries[0] = new EncryptedPasswordLibrary(new RSACryptoServiceProvider(), "untitled", new List<EncryptedPasswordEntry>());
+			model.EncryptedPasswordLibraries[0] = new EncryptedPasswordLibrary(new RSACryptoServiceProvider(), 
+																			   DefaultLibraryName, 
+																			   new List<EncryptedPasswordEntry>());													   
 			FilePaths.Clear();
+			Title = model.EncryptedPasswordLibraries[0].Name;
 			PasswordEntriesListBox_Items.Clear();
 
 			model.EncryptedPasswordLibraries[0].PasswordEntries.ForEach(delegate(EncryptedPasswordEntry encryptedPasswordEntry)

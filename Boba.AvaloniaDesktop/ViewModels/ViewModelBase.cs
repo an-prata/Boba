@@ -8,6 +8,10 @@ namespace Boba.AvaloniaDesktop.ViewModels
 {
 	public class ViewModelBase : ReactiveObject
 	{
+		protected const string DefaultLibraryName = "Untitled";
+		protected const string DefaultApplicationName = "Untitled";
+		protected const string DefaultUsername = "No Username";
+		protected const string DefaultPassword = "No Password";
 		protected const string NoNameGivenMessage = "No name given, please provide a name.";
 		protected const string PasswordPlaceholder = "••••••••••••";
 		protected const string PasswordsDontMatchMessage = "Passwords Dont Match! >:(";

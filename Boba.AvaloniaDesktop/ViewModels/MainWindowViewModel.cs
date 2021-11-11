@@ -26,8 +26,8 @@ namespace Boba.AvaloniaDesktop.ViewModels
 		private bool _copyPasswordButton_IsEnabled;
 		private int _passwordEntriesListBox_SelectedIndex;
 		private ObservableCollection<string> _passwordEntriesListBox_Items;
-		private readonly EncryptedPasswordLibraryModel model;
 		private NewEntryDialog? newEntryDialog;
+		private readonly EncryptedPasswordLibraryModel model;
 
 		public string Title
 		{
@@ -161,39 +161,48 @@ namespace Boba.AvaloniaDesktop.ViewModels
 
 		protected void NewEntryDialog_OnRequestClose(object? sender, NewEntryDialogOnRequestCloseEventArgs e)
 		{
-			if (e.NewEntryDialogViewModel == null || newEntryDialog == null) throw new NullReferenceException();
+			if (e.NewEntryDialogViewModel == null) throw new NullReferenceException("e.NewEntryDialogViewModel was null.");
+			if (newEntryDialog == null) throw new NullReferenceException("newEntryDialog was null.");
 
 			newEntryDialog.Close();
 
 			if (e.NewEntryDialogViewModel.Canceled) return;
 			
-			model.EncryptedPasswordLibraries[0].NewEntry(e.NewEntryDialogViewModel.PasswordResult, e.NewEntryDialogViewModel.ApplicationResult, e.NewEntryDialogViewModel.UsernameResult);
+			model.EncryptedPasswordLibraries[0].NewEntry(e.NewEntryDialogViewModel.PasswordResult, 
+														 e.NewEntryDialogViewModel.ApplicationResult ?? DefaultApplicationName, 
+														 e.NewEntryDialogViewModel.UsernameResult ?? DefaultUsername);
 			PasswordEntriesListBox_Items.Clear();
 
-			model.EncryptedPasswordLibraries[0].PasswordEntries.ForEach(delegate(EncryptedPasswordEntry encryptedPasswordEntry)
-			{
+			model.EncryptedPasswordLibraries[0].PasswordEntries.ForEach(delegate(EncryptedPasswordEntry encryptedPasswordEntry) 
+			{ // This keeps the PasswordEntries list in both the ViewModel and Model in the same order.
 				PasswordEntriesListBox_Items.Add(encryptedPasswordEntry.Application);
 			});
 		}
 
 		protected void EditEntryDialog_OnRequestClose(object? sender, NewEntryDialogOnRequestCloseEventArgs e)
 		{
-			if (e.NewEntryDialogViewModel == null || newEntryDialog == null) throw new NullReferenceException();
+			if (e.NewEntryDialogViewModel == null) throw new NullReferenceException("e.NewEntryDialogViewModel was null.");
+			if (newEntryDialog == null) throw new NullReferenceException("newEntryDialog was null.");
 
 			newEntryDialog.Close();
 
 			if (e.NewEntryDialogViewModel.Canceled) return;
 
-			model.EncryptedPasswordLibraries[0].PasswordEntries[_passwordEntriesListBox_SelectedIndex].Application = e.NewEntryDialogViewModel.ApplicationResult;
-			model.EncryptedPasswordLibraries[0].PasswordEntries[_passwordEntriesListBox_SelectedIndex].Username = e.NewEntryDialogViewModel.UsernameResult;
+			model.EncryptedPasswordLibraries[0].PasswordEntries[_passwordEntriesListBox_SelectedIndex]
+				.Application = e.NewEntryDialogViewModel.ApplicationResult ?? DefaultApplicationName;
 
-			if (!e.NoPrivateKey)
+			model.EncryptedPasswordLibraries[0].PasswordEntries[_passwordEntriesListBox_SelectedIndex]
+				.Username = e.NewEntryDialogViewModel.UsernameResult ?? DefaultUsername;
+
+			if (model.EncryptedPasswordLibraries[0].CryptoServiceProvider != null) 
 			{
-				model.EncryptedPasswordLibraries[0].PasswordEntries[_passwordEntriesListBox_SelectedIndex].SetPassword(
-					model.EncryptedPasswordLibraries[0].CryptoServiceProvider, e.NewEntryDialogViewModel.PasswordResult);
-			} 
+				model.EncryptedPasswordLibraries[0].PasswordEntries[_passwordEntriesListBox_SelectedIndex]
+					.SetPassword(model.EncryptedPasswordLibraries[0].CryptoServiceProvider, e.NewEntryDialogViewModel.PasswordResult);
+			}
 
-			PasswordEntriesListBox_Items[_passwordEntriesListBox_SelectedIndex] = e.NewEntryDialogViewModel.ApplicationResult;
+			PasswordEntriesListBox_Items[_passwordEntriesListBox_SelectedIndex] = 
+				model.EncryptedPasswordLibraries[0].PasswordEntries[_passwordEntriesListBox_SelectedIndex].Application;
+
 			EventHandler eventHandler = SelectedEntryChanged;
 			eventHandler.Invoke(this, new EventArgs());
 		}
@@ -212,22 +221,32 @@ namespace Boba.AvaloniaDesktop.ViewModels
 				return;
 			}
 
-			ApplicationTextBlock_Text = model.EncryptedPasswordLibraries[0].PasswordEntries[PasswordEntriesListBox_SelectedIndex].Application;
-			UsernameTextBlock_Text = model.EncryptedPasswordLibraries[0].PasswordEntries[PasswordEntriesListBox_SelectedIndex].Username;
-			PasswordTextBlock_Text = PasswordPlaceholder;
+			ApplicationTextBlock_Text = model.EncryptedPasswordLibraries[0]
+				.PasswordEntries[_passwordEntriesListBox_SelectedIndex].Application;
+
+			UsernameTextBlock_Text = model.EncryptedPasswordLibraries[0]
+				.PasswordEntries[_passwordEntriesListBox_SelectedIndex].Username;
+
+			if (model.EncryptedPasswordLibraries[0].CryptoServiceProvider != null) 
+			{
+				PasswordTextBlock_Text = model.EncryptedPasswordLibraries[0]
+					.GetPassword(_passwordEntriesListBox_SelectedIndex) == null ? "" : PasswordPlaceholder;
+			}
+			else PasswordTextBlock_Text = PasswordPlaceholder;
+
 			EditEntryButton_IsEnabled = true;
-			CopyApplicationButton_IsEnabled = true;
-			CopyUsernameButton_IsEnabled = true;
-			CopyPasswordButton_IsEnabled = true;
+			CopyApplicationButton_IsEnabled = ApplicationTextBlock_Text != DefaultApplicationName;
+			CopyUsernameButton_IsEnabled = UsernameTextBlock_Text != DefaultUsername;
+			CopyPasswordButton_IsEnabled = PasswordTextBlock_Text != DefaultPassword;
 		}
 
 		public MainWindowViewModel()
 		{
 			_passwordEntriesListBox_Items = new ObservableCollection<string>();
 			SelectedEntryChanged += OnSelectedEntryChanged;
-			model = new EncryptedPasswordLibraryModel(2048, "name");
+			model = new EncryptedPasswordLibraryModel(2048, DefaultLibraryName);
 			FilePaths = new List<string?>();
-			_title = "Untitled";
+			_title = DefaultLibraryName;
 
 			_applicationTextBlock_Text = "";
 			_usernameTextBlock_Text = "";

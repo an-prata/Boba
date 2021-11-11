@@ -18,7 +18,6 @@ namespace Boba.AvaloniaDesktop.ViewModels
         { 
             get => _singleStringTextBox_Text; 
             set => this.RaiseAndSetIfChanged(ref _singleStringTextBox_Text, value); 
-        
         }
 
         public string Result { get; set; }

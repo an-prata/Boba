@@ -8,24 +8,21 @@ using ReactiveUI;
 using Avalonia.Media;
 using Boba.AvaloniaDesktop.Views;
 
-
 namespace Boba.AvaloniaDesktop.ViewModels
 {
     public class NewEntryDialogViewModel : ViewModelBase
 	{
 		/// <summary>
-		/// Caused in the NewEntryDialogConstructor to disable PasswordTextBox 
-		/// and ConfirmPasswordTextBox and to set the NoPrivateKey property
-		/// of the NewEntryDialogOnRequestCloseEventArgs event.
+		/// Used in the NewEntryDialogViewModel constructor to disable PasswordTextBox 
+		/// and ConfirmPasswordTextBox.
 		/// </summary>
-		public const bool PasswordsDisabled = true;
+		public const bool PasswordsDisabled = false;
 
 		/// <summary>
-		/// Caused in the NewEntryDialogConstructor to enable PasswordTextBox 
-		/// and ConfirmPasswordTextBox and to set the NoPrivateKey property
-		/// of the NewEntryDialogOnRequestCloseEventArgs event.
+		/// Used in the NewEntryDialogViewModel constructor to enable PasswordTextBox 
+		/// and ConfirmPasswordTextBox.
 		/// </summary>
-		public const bool PasswordsEnabled = false;
+		public const bool PasswordsEnabled = true;
 
 		private bool _passwordTextBox_IsEnabled;
 		private bool _confirmPasswordTextBox_IsEnabled;
@@ -36,7 +33,6 @@ namespace Boba.AvaloniaDesktop.ViewModels
 		private string _passwordsMatchTextBlock_Text;
 		private SolidColorBrush _passwordsMatchTextBlock_Foreground;
 
-		public bool EditMode { get; set; }
 		public bool PasswordTextBox_IsEnabled 
 		{ 
 			get => _passwordTextBox_IsEnabled; 
@@ -85,9 +81,9 @@ namespace Boba.AvaloniaDesktop.ViewModels
 			set => this.RaiseAndSetIfChanged(ref _passwordsMatchTextBlock_Foreground, value); 
 		}
 
-		public string ApplicationResult { get; set; }
-		public string UsernameResult { get; set; }
-		public byte[] PasswordResult { get; set; }
+		public string? ApplicationResult { get; set; }
+		public string? UsernameResult { get; set; }
+		public byte[]? PasswordResult { get; set; }
 
 		public bool Canceled { get; set; } = true;
 
@@ -96,7 +92,7 @@ namespace Boba.AvaloniaDesktop.ViewModels
 		public void CancelButton_Clicked()
 		{
 			if (OnRequestClose == null) throw new NullReferenceException();
-			OnRequestClose(this, new NewEntryDialogOnRequestCloseEventArgs() { NewEntryDialogViewModel = this, NoPrivateKey = EditMode } );
+			OnRequestClose(this, new NewEntryDialogOnRequestCloseEventArgs() { NewEntryDialogViewModel = this } );
 		}
 		
 		public void EnterButton_Clicked()
@@ -111,42 +107,30 @@ namespace Boba.AvaloniaDesktop.ViewModels
 				return;
 			}
 
-			ApplicationResult = _applicationTextBox_Text;
-			UsernameResult = _usernameTextBox_Text;
-			PasswordResult = Encoding.UTF8.GetBytes(_passwordTextBox_Text);
-
 			Canceled = false;
-			if (OnRequestClose == null) throw new NullReferenceException();
-			OnRequestClose(this, new NewEntryDialogOnRequestCloseEventArgs() { NewEntryDialogViewModel = this, NoPrivateKey = EditMode } );
+			ApplicationResult = _applicationTextBox_Text == "" ? null : _applicationTextBox_Text;
+			UsernameResult = _usernameTextBox_Text == "" ? null : _usernameTextBox_Text;
+			PasswordResult = _passwordTextBox_Text == "" ? null : Encoding.UTF8.GetBytes(_passwordTextBox_Text);
+
+			if (OnRequestClose == null) throw new NullReferenceException("No event handler assigned to OnRequestClose.");
+			OnRequestClose(this, new NewEntryDialogOnRequestCloseEventArgs() { NewEntryDialogViewModel = this } );
 		}
 
 		/// <summary>
 		/// Creates a new NewEntryDialogViewModel.
 		/// </summary>
-		/// <param name="editMode"> 
-		/// 	<para>
-		/// 		The edit mode of the ViewModel, true means that password boxes are disabled and
-		/// 		the NewEntryDialogOnRequestCloseEventArgs.NoPrivateKey will be set equal to this value.
-		/// 	</para> 
-		/// 	<para>
-		/// 		You can use the constants PasswordsDisabled and PasswordEnabled to more easily
-		/// 		assign this parameter.
-		/// 	</para>
-		/// </param>
-		public NewEntryDialogViewModel(bool editMode)
+		/// <param name="passwordBoxesEnabled"> Enables/Disables PasswordTextBox and ConfirmPasswordTextBox</param>
+		public NewEntryDialogViewModel(bool passwordBoxesEnabled)
 		{
-			_passwordTextBox_IsEnabled = !editMode;
-			_confirmPasswordTextBox_IsEnabled = !editMode;
+			PasswordTextBox_IsEnabled = passwordBoxesEnabled;
+			ConfirmPasswordTextBox_IsEnabled = passwordBoxesEnabled;
+
 			_applicationTextBox_Text = "";
 			_usernameTextBox_Text = "";
 			_passwordTextBox_Text = "";
 			_confirmPasswordTextBox_Text = "";
 			_passwordsMatchTextBlock_Text = "";
-			ApplicationResult = "";
-			UsernameResult = "";
-			PasswordResult = Array.Empty<byte>();
 			_passwordsMatchTextBlock_Foreground = new SolidColorBrush(new Color(255, 200, 80, 80));
-			EditMode = editMode;
 		}
 	}
 }

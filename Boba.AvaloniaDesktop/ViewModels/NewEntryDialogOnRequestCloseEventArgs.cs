@@ -3,13 +3,11 @@
 // Licensed under the MIT License.
 
 using System;
-using Boba.AvaloniaDesktop.Views;
 
 namespace Boba.AvaloniaDesktop.ViewModels
 {
     public class NewEntryDialogOnRequestCloseEventArgs : EventArgs
     {
         public NewEntryDialogViewModel? NewEntryDialogViewModel { get; set; }
-        public bool NoPrivateKey { get; set; }
     }
 }

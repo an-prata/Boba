@@ -2,13 +2,9 @@
 // Copyright (c) 2021 Evan Overman (https://github.com/an-prata)
 // Licensed under the MIT License.
 
-using System;
 using System.Collections.Generic;
 using System.Security.Cryptography;
-using System.Linq;
-using System.Threading.Tasks;
 using Boba.PasswordManager;
-using Boba.PasswordManager.FileHandling;
 
 namespace Boba.AvaloniaDesktop.Models
 {

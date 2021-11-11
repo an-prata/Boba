@@ -28,7 +28,11 @@ namespace Boba.PasswordManager
 		/// Gets a decrypted byte[] of the given EncryptedPasswordEntry by index.
 		/// </summary>
 		/// <param name="entryIndex">Index of the EncryptedPasswordEntry</param>
-		public byte[] GetPassword(int entryIndex) => CryptoServiceProvider.Decrypt(_encryptedPasswordEntries[entryIndex].Password, true);
+		public byte[] GetPassword(int entryIndex) 
+		{
+			if (_encryptedPasswordEntries[entryIndex].Password == null) return null;
+			return CryptoServiceProvider.Decrypt(_encryptedPasswordEntries[entryIndex].Password, true);
+		} 
 
 		/// <summary>
 		/// Adds an EncryptedPasswordEntry object to PasswordEntries.
