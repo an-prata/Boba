@@ -8,21 +8,29 @@
 	    Title="Create New Password Entry"
 	    WindowStartupLocation="CenterScreen"
 	    Width="300"
-	    Height="300"
-		Topmost="true"
+	    Height="360"
 	    CanResize="false">
 
 	<StackPanel Spacing="10" Margin="10">
-		<TextBox Text="{Binding ApplicationTextBox_Text}" Watermark="Application/Website"/>
-		<TextBox Text="{Binding UsernameTextBox_Text}" Watermark="Username/Email"/>
+		<TextBox Text="{Binding ApplicationTextBox_Text}" 
+				 UseFloatingWatermark="true"
+				 Watermark="Application/Website"
+				 Height="50"/>
+		<TextBox Text="{Binding UsernameTextBox_Text}" 
+				 UseFloatingWatermark="true" 
+				 Watermark="Username/Email"
+				 Height="50"/>
 		<TextBox Text="{Binding PasswordTextBox_Text}"
+				 UseFloatingWatermark="true"
 				 Watermark="Password" 
 				 PasswordChar="•"
-				 IsEnabled="{Binding PasswordTextBox_IsEnabled}"/>
+				 IsEnabled="{Binding PasswordTextBox_IsEnabled}"
+				 Height="50"/>
 		<TextBox Text="{Binding ConfirmPasswordTextBox_Text}"
 				 Watermark="Confirm" 
 				 PasswordChar="•"
-				 IsEnabled="{Binding ConfirmPasswordTextBox_IsEnabled}"/>
+				 IsEnabled="{Binding ConfirmPasswordTextBox_IsEnabled}"
+				 Height="50"/>
 		<TextBlock Text="{Binding PasswordsMatchTextBlock_Text}" 
 				   HorizontalAlignment="Center"
 				   Foreground="{Binding PasswordMatchTextBlock_Foreground}"/>

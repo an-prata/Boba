@@ -7,7 +7,6 @@
     	Title="MessageBox"
 		Width="240"
 	    Height="100"
-		Topmost="true"
 	    CanResize="false">
 
 		<StackPanel Spacing="10" Margin="10">

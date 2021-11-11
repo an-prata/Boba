@@ -8,6 +8,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using ReactiveUI;
 using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Controls.ApplicationLifetimes;
 using Boba.PasswordManager;
 using Boba.AvaloniaDesktop.Views;
 using Boba.AvaloniaDesktop.Models;
@@ -97,10 +99,13 @@ namespace Boba.AvaloniaDesktop.ViewModels
 
 		public void AddEntryButton_Clicked()
 		{
-			NewEntryDialogViewModel newEntryDialogViewModel = new(NewEntryDialogViewModel.PasswordsEnabled);
-			newEntryDialog = new NewEntryDialog { DataContext = newEntryDialogViewModel };
-			newEntryDialogViewModel.OnRequestClose += NewEntryDialog_OnRequestClose;
-			newEntryDialog.Show();
+			if (Application.Current.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+			{
+				NewEntryDialogViewModel newEntryDialogViewModel = new(NewEntryDialogViewModel.PasswordsEnabled);
+				newEntryDialog = new NewEntryDialog { DataContext = newEntryDialogViewModel };
+				newEntryDialogViewModel.OnRequestClose += NewEntryDialog_OnRequestClose;
+				newEntryDialog.ShowDialog(desktop.MainWindow);
+			}
 		}
 
 		public void RemoveEntryButton_Clicked()
@@ -117,11 +122,14 @@ namespace Boba.AvaloniaDesktop.ViewModels
 		{
 			if (model.EncryptedPasswordLibraries[0].CryptoServiceProvider == null) 
 			{
-				var viewModel = new MessageBoxViewModel(NoPrivateKeyMessage);
-				var messageBox = new MessageBox() { DataContext = viewModel, Width = 480, Height = 140 };
-				viewModel.OnRequestClose += (sender, e) => messageBox.Close();
-				messageBox.Show();
-				return;
+				if (Application.Current.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+				{
+					var viewModel = new MessageBoxViewModel(NoPrivateKeyMessage);
+					var messageBox = new MessageBox() { DataContext = viewModel, Width = 480, Height = 140 };
+					viewModel.OnRequestClose += (sender, e) => messageBox.Close();
+					messageBox.ShowDialog(desktop.MainWindow);
+					return;
+				}
 			}
 
 			byte[] unencryptedPassword = model.EncryptedPasswordLibraries[0].GetPassword(PasswordEntriesListBox_SelectedIndex);
@@ -154,9 +162,12 @@ namespace Boba.AvaloniaDesktop.ViewModels
 				};
 			}
 
-			newEntryDialog = new NewEntryDialog { DataContext = newEntryDialogViewModel };
-			newEntryDialogViewModel.OnRequestClose += EditEntryDialog_OnRequestClose;
-			newEntryDialog.Show();
+			if (Application.Current.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+			{
+				newEntryDialog = new NewEntryDialog { DataContext = newEntryDialogViewModel };
+				newEntryDialogViewModel.OnRequestClose += EditEntryDialog_OnRequestClose;
+				newEntryDialog.ShowDialog(desktop.MainWindow);
+			}
 		}
 
 		protected void NewEntryDialog_OnRequestClose(object? sender, NewEntryDialogOnRequestCloseEventArgs e)

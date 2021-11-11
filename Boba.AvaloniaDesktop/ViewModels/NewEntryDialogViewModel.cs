@@ -5,8 +5,10 @@
 using System;
 using System.Text;
 using ReactiveUI;
-using Avalonia.Media;
 using Boba.AvaloniaDesktop.Views;
+using Avalonia;
+using Avalonia.Media;
+using Avalonia.Controls.ApplicationLifetimes;
 
 namespace Boba.AvaloniaDesktop.ViewModels
 {
@@ -99,12 +101,15 @@ namespace Boba.AvaloniaDesktop.ViewModels
 		{
 			if (_passwordTextBox_Text != _confirmPasswordTextBox_Text)
 			{
-				_passwordsMatchTextBlock_Text = PasswordsDontMatchMessage;
-				var viewModel = new MessageBoxViewModel(PasswordsDontMatchMessage);
-				var messageBox = new MessageBox() { DataContext = viewModel };
-				viewModel.OnRequestClose += (sender, e) => messageBox.Close();
-				messageBox.Show();
-				return;
+				if (Application.Current.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+				{
+					_passwordsMatchTextBlock_Text = PasswordsDontMatchMessage;
+					var viewModel = new MessageBoxViewModel(PasswordsDontMatchMessage);
+					var messageBox = new MessageBox() { DataContext = viewModel };
+					viewModel.OnRequestClose += (sender, e) => messageBox.Close();
+					messageBox.ShowDialog(desktop.MainWindow);
+					return;
+				}
 			}
 
 			Canceled = false;
