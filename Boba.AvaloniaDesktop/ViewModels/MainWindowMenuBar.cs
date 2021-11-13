@@ -121,6 +121,23 @@ namespace Boba.AvaloniaDesktop.ViewModels
 			}
 		}
 
+		public void RenameMenuItem_Clicked()
+		{
+			if (Application.Current.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop) 
+			{
+				var viewModel = new SingleStringDialogViewModel();
+				var nameDialog = new SingleStringDialog() { Title = "Rename Library", DataContext = viewModel };
+				nameDialog.ShowDialog(desktop.MainWindow);
+
+				viewModel.OnRequestClose += (sender, e) =>
+				{
+					nameDialog.Close();
+					model.EncryptedPasswordLibraries[0].Name = viewModel.Result;
+					Title = model.EncryptedPasswordLibraries[0].Name;
+				};
+			}
+		}
+
 		public async void ExportPublicKeyMenuItem_Clicked()
 		{
 			if (Application.Current.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
@@ -175,23 +192,6 @@ namespace Boba.AvaloniaDesktop.ViewModels
 
                 model.EncryptedPasswordLibraries[0].CryptoServiceProvider = cryptoServiceProvider;
             }
-		}
-
-		public void RenameMenuItem_Clicked()
-		{
-			if (Application.Current.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop) 
-			{
-				var viewModel = new SingleStringDialogViewModel();
-				var nameDialog = new SingleStringDialog() { Title = "Rename Library", DataContext = viewModel };
-				nameDialog.ShowDialog(desktop.MainWindow);
-
-				viewModel.OnRequestClose += (sender, e) =>
-				{
-					nameDialog.Close();
-					model.EncryptedPasswordLibraries[0].Name = viewModel.Result;
-					Title = model.EncryptedPasswordLibraries[0].Name;
-				};
-			}
 		}
 	}
 }
